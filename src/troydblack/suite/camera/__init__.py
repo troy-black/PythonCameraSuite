@@ -1,6 +1,5 @@
 class CameraDriver:
-    def __init__(self):
-        self.last_image_bytes = None
+    last_image_bytes = None
 
     def stream_image(self):
         raise RuntimeError('Must be implemented by Driver subclass')

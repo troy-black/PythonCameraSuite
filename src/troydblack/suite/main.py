@@ -13,11 +13,11 @@ logging.debug('Starting Application')
 app = FastAPI()
 app.secret_key = config.App.secret_key
 
-routes = import_submodules('src.troydblack.suite.routers')
+routes = import_submodules(config.App.routers_package)
 for module_name, module in routes.items():
     module_name = module_name.split('.')[-1]
     app.include_router(module.router, prefix='/' + module_name, tags=[module_name])
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=8000)
+    uvicorn.run(app, host=config.App.host, port=config.App.port)

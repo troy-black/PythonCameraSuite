@@ -1,15 +1,24 @@
 class ConfigBase:
-
+    """
+    Default Config Profile
+    """
     class App:
-        secret_key = 'QWXYYESG3TVD32HRYHM3HXAA45SRW6QP'
-        logging = 'DEBUG'
+        routers_package: str = 'src.troydblack.suite.routers'
+        secret_key: str = 'change_me_before_using_in_production'
+        logging: str = 'NOTSET'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
+        host: str = '0.0.0.0'
+        port: int = 8000
 
     class Camera:
-        module = 'src.troydblack.suite.camera.opencv'
-        driver = 'OpenCvDriver'
+        module = 'src.troydblack.suite.camera.mock'
+        driver = 'MockDriver'
         kwargs = {
-            'source': 'http://192.168.1.157:8080/stream/video.mjpeg'
+            'width': 1280,
+            'height': 720,
+            'sleep': 1 / 15  # FPS
         }
 
     class Uv4l:
-        pass
+        external: bool
+        host: str
+        steam_url: str

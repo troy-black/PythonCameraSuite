@@ -6,12 +6,11 @@ from src.troydblack.suite.camera import CameraDriver
 
 
 class OpenCvDriver(CameraDriver):
-    def __init__(self, source):
+    def __init__(self, *, source):
         self.driver = cv.VideoCapture(source)
         if not self.driver.isOpened():
             raise RuntimeError(f'Could not start camera from source: {source}')
         self.lock = threading.Lock()
-        super().__init__()
 
     def stream_image(self):
         response = True
