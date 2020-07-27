@@ -14,5 +14,5 @@ class Config(ConfigBase):
 
     class Uv4l(ConfigBase.Uv4l):
         external: bool = True
-        host: str = '192.168.1.xxx:8080'
+        host: str = '192.168.1.157:8080'
         steam_url: str = f'http://{host}/stream/video.mjpeg'
