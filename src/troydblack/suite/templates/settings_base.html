@@ -1,0 +1,13 @@
+{% extends '_base.html' %}
+{% from 'macros/settings_breadcrumb.html' import settings_breadcrumb with context %}
+{% block css %}
+    <link rel="stylesheet" href="../static/css/breadcrumb.css">
+{% endblock %}
+{% block title %}Settings{% endblock %}
+{% block page %}
+    {{ super() }}
+    <h1 class="mt-5">Black Camera Suite Settings{{ '' if self.title() == 'Settings' else ' - ' + self.title() }}</h1>
+    {{ settings_breadcrumb(self.title(), settingsList) }}
+    {% block form %}
+    {% endblock %}
+{% endblock %}

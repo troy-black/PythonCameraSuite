@@ -1,17 +1,14 @@
-import importlib
-
 from fastapi import APIRouter
 from starlette.requests import Request
 from starlette.responses import StreamingResponse, Response
 
 from src.troydblack.suite.camera import CameraDriver
-from src.troydblack.suite.config import config
+from src.troydblack.suite.config import config, get_camera_driver
 from src.troydblack.suite.app import templates
 
 router = APIRouter()
 
-camera_module = importlib.import_module(config.Camera.module)
-camera_driver: CameraDriver = getattr(camera_module, config.Camera.driver)(**config.Camera.kwargs)
+camera_driver: CameraDriver = get_camera_driver(config.web.active_driver)
 
 
 @router.get('/jpg')

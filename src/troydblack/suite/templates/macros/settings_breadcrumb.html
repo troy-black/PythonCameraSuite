@@ -1,0 +1,13 @@
+{% macro settings_breadcrumb(currentTitle, settingsList) %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {% for setting in settingsList %}
+                {% if setting == currentTitle %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ setting }}</li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('get_' + ('' if setting == 'Settings' else 'settings_') + setting.lower()) }}">{{ setting }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </nav>
+{% endmacro %}

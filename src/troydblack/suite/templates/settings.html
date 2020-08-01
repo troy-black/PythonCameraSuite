@@ -1,0 +1,22 @@
+{% extends 'settings_base.html' %}
+{% block title %}Settings{% endblock %}
+{% block form %}
+    <form>
+        <p class="font-weight-bold">Available Camera Drivers</p>
+        <div class="form-group">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                <label class="form-check-label" for="defaultCheck1">
+                    Default checkbox
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck2" disabled>
+                <label class="form-check-label" for="defaultCheck2">
+                    Disabled checkbox
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+    </form>
+{% endblock %}
