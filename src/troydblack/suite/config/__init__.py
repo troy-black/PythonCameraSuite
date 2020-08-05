@@ -1,17 +1,23 @@
 import importlib
 from enum import Enum
-from typing import List, Any, Dict
 
 from pydantic import BaseModel
 
-from troydblack.suite.camera import CameraDriver
+
+class EnumDriver(Enum):
+    # def __new__(cls, *args, **kwargs):
+    #     obj = object.__new__(cls)
+    #     obj._value_ = args[0]
+    #     return obj
+    #
+    # def __init__(self, proper_name: str):
+    #     self.proper_name: str = proper_name
+
+    MOCK = 'Mock'  # , 'mock'
+    OPENCV = 'OpenCv'  # , 'opencv'
 
 
-class EnumDriver(str, Enum):
-    MOCK = 'MockDriver'
-    OPENCV = 'OpenCvDriver'
-
-
+# TODO - Don't recreate the wheel
 class EnumLoggingLevel(str, Enum):
     NOTSET = 'NOTSET'
     CRITICAL = 'CRITICAL'
@@ -21,59 +27,71 @@ class EnumLoggingLevel(str, Enum):
     DEBUG = 'DEBUG'
 
 
-class DriverBase(BaseModel):
-    module: str
-    class_name: str
-    name: str
+class EnumPackages(str, Enum):
+    CAMERA = 'src.troydblack.suite.camera'
+    ROUTERS = 'src.troydblack.suite.routers'
+
+# class DriverBase:
+#     module: str
+#     class_name: str
+#     route: str
+#     template: str
+#     title: str
+#     url: str
+#
+#
+# class MockDriver(DriverBase):
+#     module = 'src.troydblack.suite.camera.mock'
+#     class_name = 'MockDriver'
+#     route = 'get_settings_mock'
+#     template = 'settings_mock.html'
+#     title = 'Mock'
+#     url = '/mock'
+#
+#
+# class OpenCvDriver(DriverBase):
+#     module = 'src.troydblack.suite.camera.opencv'
+#     class_name = 'OpenCvDriver'
+#     route = 'get_settings_opencv'
+#     template = 'settings_opencv.html'
+#     title = 'OpenCv'
+#     url = '/opencv'
 
 
-class MockDriver(DriverBase):
-    module = 'src.troydblack.suite.camera.mock'
-    class_name = 'MockDriver'
-    name = 'mock'
+# class WebBase(BaseModel):
+#     routers_package: str = 'src.troydblack.suite.routers'
 
 
-class OpenCvDriver(DriverBase):
-    module = 'src.troydblack.suite.camera.opencv'
-    class_name = 'OpenCvDriver'
-    name = 'opencv'
-
-
-class WebBase(BaseModel):
-    routers_package: str = 'src.troydblack.suite.routers'
-    secret_key: str = 'change_me_before_using_in_production'
-
-
-class ConfigBaseApp(BaseModel):
+class ConfigApp(BaseModel):
     logging: EnumLoggingLevel = EnumLoggingLevel.NOTSET
     host: str = '0.0.0.0'
     port: int = 8000
 
 
-class ConfigWebApp(BaseModel):
+class ConfigWeb(BaseModel):
     active_driver: EnumDriver = EnumDriver.MOCK
-    display_settings: List[EnumDriver] = [
-        EnumDriver.MOCK,
-        EnumDriver.OPENCV
-    ]
+    display_mock: bool = True
+    display_opencv: bool = True
 
 
-class ConfigMockDriverSettings(BaseModel):
+class ConfigMockDriver(BaseModel):
     width: int = 1280
     height: int = 720
     sleep: float = 1 / 15  # FPS
 
 
-class ConfigOpenCvDriverSettings(BaseModel):
+class ConfigOpenCvDriver(BaseModel):
     source: str = '0'
 
 
 class ConfigBase(BaseModel):
-    # web_base: WebBase = WebBase()
 
     # The following can be updated via Web API
-    base: ConfigBaseApp = ConfigBaseApp()
-    web: ConfigWebApp = ConfigWebApp()
+    app: ConfigApp = ConfigApp()
+    web: ConfigWeb = ConfigWeb()
+
+    mock: ConfigMockDriver = ConfigMockDriver()
+    opencv: ConfigOpenCvDriver = ConfigOpenCvDriver()
 
 
 def load_config() -> ConfigBase:
@@ -89,29 +107,43 @@ def load_config() -> ConfigBase:
     return base
 
 
-driver_details: Dict[EnumDriver, DriverBase] = {
-    EnumDriver.MOCK: MockDriver(),
-    EnumDriver.OPENCV: OpenCvDriver()
-}
-
-driver_settings: Dict[EnumDriver, BaseModel] = {
-    EnumDriver.MOCK: ConfigMockDriverSettings(),
-    EnumDriver.OPENCV: ConfigOpenCvDriverSettings()
-}
-
 config: ConfigBase = load_config()
 
 
-def get_camera_driver(driver_name: EnumDriver):
-    base: DriverBase = driver_details[driver_name]
-    settings: BaseModel = driver_settings[driver_name]
+def get_camera_driver(driver_details: EnumDriver):
     settings_dict = {
         key: val
-        for key, val in settings.__dict__.items()
+        for key, val in getattr(config, driver_details.name.lower()).__dict__.items()
         if not key.startswith('__')
     }
-    camera_module = importlib.import_module(base.module)
-    return getattr(camera_module, base.class_name)(**settings_dict)
+    camera_module = importlib.import_module(f'{EnumPackages.CAMERA}.{driver_details.name.lower()}')
+    return getattr(camera_module, f'{driver_details.value}Driver')(**settings_dict)
+
+
+# def get_settings_details():
+#     def build(title, route, template):
+#         return {
+#             title: {
+#                 'route': route,
+#                 'template': template,
+#                 # 'active': config.web.active_driver == title
+#             }
+#         }
+#
+#     details = build('Settings', 'get_settings', 'settings.html')
+#     [
+#         details.update(
+#             build(
+#                 driver_details[d].title,
+#                 driver_details[d].route,
+#                 driver_details[d].template
+#             )
+#         )
+#         for d in config.web.display_settings
+#     ]
+#
+#     return details
+
 
 # import importlib
 # import platform

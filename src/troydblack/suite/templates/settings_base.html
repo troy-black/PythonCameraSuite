@@ -7,7 +7,7 @@
 {% block page %}
     {{ super() }}
     <h1 class="mt-5">Black Camera Suite Settings{{ '' if self.title() == 'Settings' else ' - ' + self.title() }}</h1>
-    {{ settings_breadcrumb(self.title(), settingsList) }}
+    {{ settings_breadcrumb(self.title(), displayDrivers) }}
     {% block form %}
     {% endblock %}
 {% endblock %}

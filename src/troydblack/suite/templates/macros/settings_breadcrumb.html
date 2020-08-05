@@ -1,11 +1,16 @@
-{% macro settings_breadcrumb(currentTitle, settingsList) %}
+{% macro settings_breadcrumb(currentTitle, displayDrivers) %}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            {% for setting in settingsList %}
-                {% if setting == currentTitle %}
-                    <li class="breadcrumb-item active" aria-current="page">{{ setting }}</li>
+            {% if currentTitle == 'Settings' %}
+                <li class="breadcrumb-item active" aria-current="page">Settings</li>
+            {% else %}
+                <li class="breadcrumb-item"><a href="{{ url_for('get_settings') }}">Settings</a></li>
+            {% endif %}
+            {% for driver in displayDrivers %}
+                {% if driver == currentTitle %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ driver }}</li>
                 {% else %}
-                    <li class="breadcrumb-item"><a href="{{ url_for('get_' + ('' if setting == 'Settings' else 'settings_') + setting.lower()) }}">{{ setting }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('get_settings_' + driver.lower()) }}">{{ driver }}</a></li>
                 {% endif %}
             {% endfor %}
         </ol>
