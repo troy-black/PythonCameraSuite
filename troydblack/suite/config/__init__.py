@@ -28,8 +28,8 @@ class EnumLoggingLevel(str, Enum):
 
 
 class EnumPackages(str, Enum):
-    CAMERA = 'src.troydblack.suite.camera'
-    ROUTERS = 'src.troydblack.suite.routers'
+    CAMERA = 'troydblack.suite.camera'
+    ROUTERS = 'troydblack.suite.routers'
 
 # class DriverBase:
 #     module: str
@@ -41,7 +41,7 @@ class EnumPackages(str, Enum):
 #
 #
 # class MockDriver(DriverBase):
-#     module = 'src.troydblack.suite.camera.mock'
+#     module = 'troydblack.suite.camera.mock'
 #     class_name = 'MockDriver'
 #     route = 'get_settings_mock'
 #     template = 'settings_mock.html'
@@ -50,7 +50,7 @@ class EnumPackages(str, Enum):
 #
 #
 # class OpenCvDriver(DriverBase):
-#     module = 'src.troydblack.suite.camera.opencv'
+#     module = 'troydblack.suite.camera.opencv'
 #     class_name = 'OpenCvDriver'
 #     route = 'get_settings_opencv'
 #     template = 'settings_opencv.html'
@@ -59,7 +59,7 @@ class EnumPackages(str, Enum):
 
 
 # class WebBase(BaseModel):
-#     routers_package: str = 'src.troydblack.suite.routers'
+#     routers_package: str = 'troydblack.suite.routers'
 
 
 class ConfigApp(BaseModel):
@@ -150,7 +150,7 @@ def get_camera_driver(driver_details: EnumDriver):
 #
 # import sys
 #
-# from src.troydblack.suite.config.config import ConfigBase
+# from troydblack.suite.config.config import ConfigBase
 #
 #
 # def load_config():

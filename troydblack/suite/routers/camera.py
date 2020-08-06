@@ -2,9 +2,9 @@ from fastapi import APIRouter
 from starlette.requests import Request
 from starlette.responses import StreamingResponse, Response
 
-from src.troydblack.suite.camera import CameraDriver
-from src.troydblack.suite.config import config, get_camera_driver
-from src.troydblack.suite.app import templates
+from troydblack.suite.camera import CameraDriver
+from troydblack.suite.config import config, get_camera_driver
+from troydblack.suite.app import templates
 
 router = APIRouter()
 

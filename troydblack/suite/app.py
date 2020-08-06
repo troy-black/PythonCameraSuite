@@ -5,8 +5,8 @@ from starlette.requests import Request
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
-from src.troydblack.suite.config import config, EnumPackages
-from src.troydblack.suite.utilities.modules import import_submodules
+from troydblack.suite.config import config, EnumPackages
+from troydblack.suite.utilities.modules import import_submodules
 
 logging.basicConfig(level=getattr(logging, config.app.logging))
 

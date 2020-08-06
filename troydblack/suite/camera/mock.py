@@ -4,7 +4,7 @@ import time
 import numpy
 from PIL import Image
 
-from src.troydblack.suite.camera import CameraDriver
+from troydblack.suite.camera import CameraDriver
 
 
 class MockDriver(CameraDriver):

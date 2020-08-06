@@ -2,7 +2,7 @@ import threading
 
 import cv2 as cv
 
-from src.troydblack.suite.camera import CameraDriver
+from troydblack.suite.camera import CameraDriver
 
 
 class OpenCvDriver(CameraDriver):

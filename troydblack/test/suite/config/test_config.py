@@ -1,6 +1,6 @@
 import unittest
 
-from src.troydblack.suite.config import load_config
+from troydblack.suite.config import load_config
 
 
 class ConfigTester(unittest.TestCase):

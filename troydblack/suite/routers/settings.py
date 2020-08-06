@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from starlette.requests import Request
 
-from src.troydblack.suite.app import templates
+from troydblack.suite.app import templates
 from troydblack.suite.config import config, EnumDriver
 
 router = APIRouter()

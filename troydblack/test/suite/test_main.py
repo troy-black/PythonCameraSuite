@@ -1,4 +1,4 @@
-from test.troydblack.suite import FastApiBaseTester
+from troydblack.test.suite import FastApiBaseTester
 
 
 class FastApiMainTester(FastApiBaseTester):

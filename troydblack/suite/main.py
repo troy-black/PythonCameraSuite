@@ -1,6 +1,6 @@
 import uvicorn
 
-from src.troydblack.suite.app import app, config, mount
+from troydblack.suite.app import app, config, mount
 
 
 mount(url='/static', directory='static', name='static')
