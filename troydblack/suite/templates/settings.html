@@ -2,24 +2,22 @@
 {% block title %}Settings{% endblock %}
 {% block form %}
     <form id="settingsForm">
-        <label for="defaultDriver">Active Camera Driver</label>
-        <select id="defaultDriver" class="custom-select form-data">
-            {% for driver in displayDrivers %}
-                {% if driver != self.title() %}
-                    <option{{ ' selected' if activeDriver == driver else '' }} value="{{ driver }}">{{ driver }}</option>
+        <label for="active_driver">Active Camera Driver</label>
+        <select id="active_driver" class="custom-select form-data">
+            {% for driver in drivers %}
+                {% if details['display_' + driver.name.lower()] %}
+                    <option{{ ' selected' if details['active_driver'] == driver else '' }} value="{{ driver.value }}">{{ driver.value }}</option>
                 {% endif %}
             {% endfor %}
         </select>
         <p></p>
         <p>Display Setting</p>
         {% for driver in drivers %}
-            {% if driver != 'Settings' %}
-                <div class="form-group form-check">
-                    <label class="checkbox-inline{{ ' active' if driver in displayDrivers else '' }}">
-                        <input id="{{ driver }}" class="form-check-input form-data" type="checkbox" value="{{ driver }}"{{ ' checked' if driver in displayDrivers else '' }}>{{ driver }}
-                    </label>
-                </div>
-            {% endif %}
+            <div class="form-group form-check">
+                <label class="checkbox-inline{{ ' active' if details['display_' + driver.name.lower()] else '' }}">
+                    <input id="{{ 'display_' + driver.name.lower() }}" class="form-check-input form-data" type="checkbox" {{ ' checked' if details['display_' + driver.name.lower()] else '' }}>{{ driver.value }}
+                </label>
+            </div>
         {% endfor %}
     </form>
     <button type="button" onclick="request('PUT', '{{ url_for('put_settings') }}', 'settingsForm')" class="btn btn-primary">Update</button>

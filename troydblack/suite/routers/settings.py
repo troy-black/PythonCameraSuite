@@ -1,9 +1,8 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
 from starlette.requests import Request
 
 from troydblack.suite.app import templates
-from troydblack.suite.config import config, EnumDriver
+from troydblack.suite.config import config, ConfigWeb, EnumDriver
 
 router = APIRouter()
 
@@ -12,32 +11,23 @@ router = APIRouter()
 async def get_settings(request: Request):
     return templates.TemplateResponse('settings.html', {
         'request': request,
-        'activeDriver': config.web.active_driver.value,
-        'drivers': ['Settings'] + [d.value for d in EnumDriver],
-        'displayDrivers': [
-            d.value
-            for d in EnumDriver
-            if getattr(config.web, f'display_{d.name.lower()}', False)
-        ]
+        'details': config.web.dict(),
+        'drivers': EnumDriver
     })
 
 
-class TestClass(BaseModel):
-    defaultDriver: str
-    Mock: str
-    OpenCv: str
-
-
-@router.put('/', response_model=TestClass)
-async def put_settings(a: TestClass):
-    return a
+@router.put('/', response_model=ConfigWeb)
+async def put_settings(settings: ConfigWeb):
+    config.web = settings
+    return settings
 
 
 @router.get('/mock')
 async def get_settings_mock(request: Request):
     return templates.TemplateResponse('settings_mock.html', {
         'request': request,
-        # 'settingsDetails': get_settings_details()
+        'details': config.web.dict(),
+        'drivers': EnumDriver
     })
 
 
@@ -45,13 +35,6 @@ async def get_settings_mock(request: Request):
 async def get_settings_opencv(request: Request):
     return templates.TemplateResponse('settings_opencv.html', {
         'request': request,
-        # 'settingsDetails': get_settings_details()
+        'details': config.web.dict(),
+        'drivers': EnumDriver
     })
-
-
-# @router.get('/uv4l')
-# async def get_settings_uv4l(request: Request):
-#     return templates.TemplateResponse('settings_uv4l.html', {
-#         'request': request,
-#         'settingsList': settingsList
-#     })

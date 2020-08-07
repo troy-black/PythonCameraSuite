@@ -24,14 +24,12 @@ function request(method, url, formId) {
 function requestOnLoadFunction(xmlHttpRequest) {
     return function () {
         if (xmlHttpRequest.status === 200) {
-            debugger;
             updateElementsFromJson(JSON.parse(this.responseText));
         }
     };
 }
 
 function updateElementsFromJson(json) {
-    debugger;
     for (let key in json) {
         document.getElementById(key).value = json[key];
     }
@@ -43,7 +41,7 @@ function convertFormToJson(formId) {
 
     for (const field of inputs) {
         if (field.id !== '') {
-            json[field.id] = field.hasOwnProperty('checked') ? field.checked : field.value;
+            json[field.id] = 'checked' in field ? field.checked : field.value;
         }
     }
 
