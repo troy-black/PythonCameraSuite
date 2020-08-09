@@ -1,10 +1,27 @@
+import argparse
+
 import importlib
+import json
+import os
+from typing import Union
+
+import sys
 from enum import Enum
 
 from pydantic import BaseModel
 
+from troydblack.suite.camera import CameraDriver
 
-class EnumDriver(Enum):
+parser = argparse.ArgumentParser()
+parser.add_argument("-p", "--profile", help="load specified settings profiles")
+parser.add_argument("-v",
+                    "--verbosity",
+                    action="count",
+                    help="increase output verbosity")
+args = parser.parse_args()
+
+
+class EnumDriver(str, Enum):
     # def __new__(cls, *args, **kwargs):
     #     obj = object.__new__(cls)
     #     obj._value_ = args[0]
@@ -31,93 +48,96 @@ class EnumPackages(str, Enum):
     CAMERA = 'troydblack.suite.camera'
     ROUTERS = 'troydblack.suite.routers'
 
-# class DriverBase:
-#     module: str
-#     class_name: str
-#     route: str
-#     template: str
-#     title: str
-#     url: str
-#
-#
-# class MockDriver(DriverBase):
-#     module = 'troydblack.suite.camera.mock'
-#     class_name = 'MockDriver'
-#     route = 'get_settings_mock'
-#     template = 'settings_mock.html'
-#     title = 'Mock'
-#     url = '/mock'
-#
-#
-# class OpenCvDriver(DriverBase):
-#     module = 'troydblack.suite.camera.opencv'
-#     class_name = 'OpenCvDriver'
-#     route = 'get_settings_opencv'
-#     template = 'settings_opencv.html'
-#     title = 'OpenCv'
-#     url = '/opencv'
+
+class BaseConfig(BaseModel):
+
+    @classmethod
+    def build(cls, *, profile: str = None):
+        base = cls()
+        details = base.dict()
+        profiles = set()
+        [
+            details.update(base.load(profile=prof) or {})
+            for prof in (sys.platform, None, profile)
+            if prof not in profiles or profiles.add(prof)
+        ]
+        return cls(**details)
+
+    def filename(self, *, profile: str = None) -> str:
+        return '{}{}.json'.format(
+            f'{profile}_' if profile else '',
+            self.__class__.__name__
+        )
+
+    def load(self, *, profile: str = None) -> dict:
+        filename = self.filename(profile=profile)
+        if os.path.exists(filename):
+            with open(filename, 'r') as json_file:
+                return json.load(json_file)
+
+    def merge(self, settings: BaseModel):
+        self.__dict__.update(settings.dict())
+        self.save()
+        return self
+
+    def save(self):
+        with open(self.filename(), 'w') as json_file:
+            json.dump(self.dict(), json_file)
 
 
-# class WebBase(BaseModel):
-#     routers_package: str = 'troydblack.suite.routers'
-
-
-class ConfigApp(BaseModel):
+class ConfigApp(BaseConfig):
     logging: EnumLoggingLevel = EnumLoggingLevel.NOTSET
     host: str = '0.0.0.0'
     port: int = 8000
 
 
-class ConfigWeb(BaseModel):
+class ConfigWeb(BaseConfig):
     active_driver: EnumDriver = EnumDriver.MOCK
     display_mock: bool = True
     display_opencv: bool = True
 
 
-class ConfigMockDriver(BaseModel):
+class ConfigMockDriver(BaseConfig):
     width: int = 1280
     height: int = 720
     sleep: float = 1 / 15  # FPS
 
 
-class ConfigOpenCvDriver(BaseModel):
-    source: str = '0'
+class ConfigOpenCvDriver(BaseConfig):
+    source: Union[int, str] = 0
 
 
-class ConfigBase(BaseModel):
+class ConfigBase:
+    def __init__(self, *, profile: str = None):
+        profile = profile or args.profile
+        self.app: ConfigApp = ConfigApp.build(profile=profile)
+        self.web: ConfigWeb = ConfigWeb.build(profile=profile)
+        self.mock: ConfigMockDriver = ConfigMockDriver.build(profile=profile)
+        self.opencv: ConfigOpenCvDriver = ConfigOpenCvDriver.build(profile=profile)
+        self._last_driver = None
+        self._camera_driver: CameraDriver = self.camera_driver  # = CameraDriver.build()
 
-    # The following can be updated via Web API
-    app: ConfigApp = ConfigApp()
-    web: ConfigWeb = ConfigWeb()
-
-    mock: ConfigMockDriver = ConfigMockDriver()
-    opencv: ConfigOpenCvDriver = ConfigOpenCvDriver()
-
-
-def load_config() -> ConfigBase:
-    # Load base config
-    base = ConfigBase()
-
-    # Overlay settings for OS
-    # TODO - finish me
-
-    # Overlay settings from command line
-    # TODO - finish me
-
-    return base
+    @property
+    def camera_driver(self):
+        if self._last_driver != self.web.active_driver:
+            camera_module = importlib.import_module(f'{EnumPackages.CAMERA}.{self.web.active_driver.name.lower()}')
+            self._camera_driver = getattr(camera_module, f'{self.web.active_driver.value}Driver')(
+                **getattr(self, self.web.active_driver.name.lower()).dict())
+            self._last_driver = self.web.active_driver
+        return self._camera_driver
 
 
-config: ConfigBase = load_config()
+config: ConfigBase = ConfigBase()
 
 
-def get_camera_driver(driver_details: EnumDriver):
-    settings_dict = {
-        key: val
-        for key, val in getattr(config, driver_details.name.lower()).__dict__.items()
-        if not key.startswith('__')
-    }
-    camera_module = importlib.import_module(f'{EnumPackages.CAMERA}.{driver_details.name.lower()}')
-    return getattr(camera_module, f'{driver_details.value}Driver')(**settings_dict)
+# def get_camera_driver(driver_details: EnumDriver):
+#     settings_dict = {
+#         key: val
+#         for key, val in getattr(config, driver_details.name.lower()).__dict__.items()
+#         if not key.startswith('__')
+#     }
+#     camera_module = importlib.import_module(f'{EnumPackages.CAMERA}.{driver_details.name.lower()}')
+#     return getattr(camera_module, f'{driver_details.value}Driver')(**settings_dict)
 
 
 # def get_settings_details():

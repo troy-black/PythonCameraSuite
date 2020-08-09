@@ -1,9 +1,9 @@
 import unittest
 
-from troydblack.suite.config import load_config
+from troydblack.suite.config import ConfigBase
 
 
 class ConfigTester(unittest.TestCase):
     def test_load_config(self):
-        config = load_config()
+        config = ConfigBase(profile='dev')
         self.assertIsNotNone(config, 'Unable to load config')
