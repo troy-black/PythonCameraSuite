@@ -1,3 +1,0 @@
-.breadcrumb-item+.breadcrumb-item::before {
-    content: "-\00a0";
-}
