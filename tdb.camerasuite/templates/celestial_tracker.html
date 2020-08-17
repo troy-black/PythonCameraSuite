@@ -1,0 +1,105 @@
+{% extends "_base.html" %}
+{% from "macros/whitespace.html" import span with context %}
+{% from "macros/form_builder.html" import inline_input_builder with context %}
+{% from "macros/form_builder.html" import inline_radio_builder with context %}
+{% block title %}Celestial Tracker{% endblock %}
+{% block page %}
+    {{ super() }}
+    <h1 class="mt-5">Celestial Tracker</h1>
+
+    <form id="tracker_form">
+
+        {{ span(5) }}
+        <div class="form-row">
+            <div class="btn-group" role="group">
+                <button type="button" onclick="startTracker()" class="btn mx-1 btn-secondary">Start</button>
+                <button type="button" onclick="stopTracker()" class="btn mx-1 btn-secondary">Stop</button>
+            </div>
+            <h5>{{ span(1) }}Tracker Status: <span id="tracker_status" class="label label-secondary">Stopped</span></h5>
+        </div>
+
+        {{ span(1) }}
+        <div class="form-row">
+            <h5>Site Location</h5>
+        </div>
+        <div class="form-row">
+            {{ inline_input_builder('latitude', 'Latitude (deg)', 'number') }}
+            {{ inline_input_builder('longitude', 'Longitude (deg)', 'number') }}
+            {{ inline_input_builder('sea_level', 'Sea Level (meters)', 'number') }}
+            {{ inline_input_builder('local_sidereal', 'Local Sidereal (Hr)', 'number') }}
+            {{ inline_input_builder('utc_datetime', 'UTC Date Time', 'datetime-local') }}
+        </div>
+
+        {{ span(1) }}
+        <div class="form-row">
+            <h5>Mount Settings</h5>
+        </div>
+        <div class="form-row">
+            {{ inline_input_builder('ra_pulse_per_deg', 'Ra Drive Deg per pulse', 'number') }}
+            {{ inline_input_builder('dec_pulse_per_deg', 'Dec Drive Deg per pulse', 'number') }}
+            {{ inline_input_builder('ra_osc', 'Ra Osc (Hz)', 'number', '39.99') }}
+            {{ inline_input_builder('azimuth', 'Azimuth (deg)', 'number') }}
+            {{ inline_input_builder('altitude', 'Altitude (deg)', 'number') }}
+            {{ inline_input_builder('update', 'Update interval (msecs)', 'number') }}
+        </div>
+
+        {{ span(1) }}
+        <div class="form-row">
+            <h5>Celestial Object Input</h5>
+        </div>
+        <div class="form-row">
+            <div class="form-group form-inline">
+                <label for="sky_coord_name">SkyCoord Name: </label>
+                <select class="form-control" id="sky_coord_name"></select>
+            </div>
+            {{ span(1) }}
+            {{ inline_input_builder('sky_coord_ra', 'Ra (00h00m00s)', 'text', '00h00m00s') }}
+            {{ inline_input_builder('sky_coord_dec', 'Dec (+-00d00m00s)', 'text', '+90d00m00s') }}
+        </div>
+
+        {{ span(1) }}
+        <div class="form-row">
+            <h5>Mount Position Set-points</h5>
+        </div>
+        <div class="form-row">
+            {{ inline_input_builder('ra_stepper_count', 'Ra/Az Set Point', 'text') }}
+            {{ inline_input_builder('dec_stepper_count', 'Dec/Alt Set Point', 'text') }}
+        </div>
+
+        {{ span(1) }}
+        <div class="form-row">
+            <h5>Tracking-Mode</h5>
+        </div>
+        <div class="form-row">
+            {{ inline_radio_builder('polar_aligned', {'Not Polar Aligned': '0', 'Polar Aligned': '1'}) }}
+        </div>
+        <div class="form-row">
+            {{ inline_radio_builder('alt_az_sp', {'Use Ra Dec Set Points': '0', 'Use Alt-Az Set Points': '1'}) }}
+        </div>
+        <div class="form-row">
+            {{ inline_radio_builder('mode_to_python', {'Polar Aligned Ra-Osc Guiding': '0', 'Slew to SP''s': '1', 'Park Scope 0,0': '2'}) }}
+        </div>
+
+        {{ span(1) }}
+        <div class="form-row">
+            <h5>Drive Status</h5>
+        </div>
+        <div class="form-row">
+        </div>
+
+        {{ span(1) }}
+        <div class="form-row">
+            <h5>Manual Adjust</h5>
+        </div>
+        <div class="form-row">
+            <div class="btn-group" role="group">
+                <button type="button" onclick="" class="btn mx-1 btn-secondary">&#8679;N</button>
+                <button type="button" onclick="" class="btn mx-1 btn-secondary">&#8681;S</button>
+                <button type="button" onclick="" class="btn mx-1 btn-secondary">&#8678;E</button>
+                <button type="button" onclick="" class="btn mx-1 btn-secondary">&#8680;W</button>
+                <input type="number" class="form-control" id="man_move" value="0">
+            </div>
+        </div>
+
+    </form>
+{% endblock %}

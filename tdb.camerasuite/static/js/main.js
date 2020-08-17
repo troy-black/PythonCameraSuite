@@ -41,7 +41,7 @@ function convertFormToJson(formId) {
 
     for (const field of inputs) {
         if (field.id !== '') {
-            json[field.id] = 'checked' in field ? field.checked : field.value;
+            json[field.id] = field.type === 'checkbox' ? field.checked : field.value;
         }
     }
 

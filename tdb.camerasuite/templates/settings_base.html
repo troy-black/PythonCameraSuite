@@ -5,7 +5,7 @@
 {% block title %}Settings{% endblock %}
 {% block page %}
     {{ super() }}
-    <h1 class="mt-5">Black Camera Suite Settings{{ '' if self.title() == 'Settings' else ' - ' + self.title() }}</h1>
+    <h1 class="mt-5">Black Camera Suite Settings{{ '' if self.title() == 'Settings' else ' - {}'.format(self.title()) }}</h1>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             {% if self.title() == 'Settings' %}
@@ -13,12 +13,12 @@
             {% else %}
                 <li class="breadcrumb-item"><a href="{{ url_for('get_settings') }}">Settings</a></li>
             {% endif %}
-            {% for driver in drivers %}
-                {% if details['display_' + driver.name.lower()] %}
+            {% for driver in settings['drivers'] %}
+                {% if settings['display']['display_{}'.format(driver.name.lower())] %}
                     {% if driver.value == self.title() %}
                         <li class="breadcrumb-item active" aria-current="page">{{ driver.value }}</li>
                     {% else %}
-                        <li class="breadcrumb-item"><a href="{{ url_for('get_settings_' + driver.name.lower()) }}">{{ driver.value }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('get_settings_{}'.format(driver.name.lower())) }}">{{ driver.value }}</a></li>
                     {% endif %}
                 {% endif %}
             {% endfor %}

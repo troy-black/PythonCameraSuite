@@ -1,0 +1,43 @@
+{% macro basic_form_bulder(formId, details, column_count) %}
+    {% set keys = details.keys()|list %}
+    <form id="{{ formId }}">
+        {% for row in range((details|length / column_count)|int) %}
+            <div class="form-row">
+                {% for col in range(row * column_count, row * column_count + column_count) %}
+                    <div class="form-group col-md-{{ (12 / column_count)|int }}">
+                        <label for="{{ keys[col] }}">{{ keys[col] }}</label>
+                        <input type="text" class="form-control form-data" id="{{ keys[col] }}" value="{{ details[keys[col]] }}">
+                    </div>
+                {% endfor %}
+                {% set r = ((details|length / column_count)|int * column_count)|int %}
+                {% for col in range(r, r + (details|length % column_count)) %}
+                    <div class="form-group col-md-{{ (12 / column_count)|int }}">
+                        <label for="{{ keys[col] }}">{{ keys[col] }}</label>
+                        <input type="text" class="form-control form-data" id="{{ keys[col] }}" value="{{ details[keys[col]] }}">
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </form>
+    <button type="button" onclick="request('PUT', '{{ url_for('put_{}'.format(formId)) }}', '{{ formId }}')" class="btn btn-primary">Update</button>
+{% endmacro %}
+
+{% macro inline_input_builder(id, label, type, value) %}
+    <div class="form-group form-inline">
+        <label for="{{ id }}">{{ label }}: </label>
+        <input type="{{ type }}" class="form-control" id="{{ id }}" value="{{ value }}">
+    </div>
+    {{ span(1) }}
+{% endmacro %}
+
+{% macro inline_radio_builder(name, detailsDict) %}
+    {% set r = 0 %}
+    {% for k, v in detailsDict.items() %}
+        {% set r = r + 1 %}
+        <div class="form-check-inline">
+            <label class="form-check-label" for="{{ name }}{{ r }}">{{ k }}{{ span(1) }}</label>
+            <input class="form-check-input" type="radio" name="{{ name }}" id="{{ name }}{{ r }}" value="{{ v }}">
+        </div>
+    {% endfor %}
+    {{ span(1) }}
+{% endmacro %}

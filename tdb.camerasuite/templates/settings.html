@@ -4,18 +4,18 @@
     <form id="settingsForm">
         <label for="active_driver">Active Camera Driver</label>
         <select id="active_driver" class="custom-select form-data">
-            {% for driver in drivers %}
-                {% if details['display_' + driver.name.lower()] %}
+            {% for driver in settings['drivers'] %}
+                {% if settings['display']['display_{}'.format(driver.name.lower())] %}
                     <option{{ ' selected' if details['active_driver'] == driver else '' }} value="{{ driver.value }}">{{ driver.value }}</option>
                 {% endif %}
             {% endfor %}
         </select>
         <p></p>
         <p>Display Setting</p>
-        {% for driver in drivers %}
+        {% for driver in settings['drivers'] %}
             <div class="form-group form-check">
-                <label class="checkbox-inline{{ ' active' if details['display_' + driver.name.lower()] else '' }}">
-                    <input id="{{ 'display_' + driver.name.lower() }}" class="form-check-input form-data" type="checkbox" {{ ' checked' if details['display_' + driver.name.lower()] else '' }}>{{ driver.value }}
+                <label class="checkbox-inline{{ ' active' if settings['display']['display_{}'.format(driver.name.lower())] else '' }}">
+                    <input id="{{ 'display_{}'.format(driver.name.lower()) }}" class="form-check-input form-data" type="checkbox" {{ ' checked' if settings['display']['display_{}'.format(driver.name.lower())] else '' }}>{{ driver.value }}
                 </label>
             </div>
         {% endfor %}
