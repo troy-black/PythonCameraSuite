@@ -2,23 +2,30 @@
 {% block title %}Settings{% endblock %}
 {% block form %}
     <form id="settingsForm">
-        <label for="active_driver">Active Camera Driver</label>
-        <select id="active_driver" class="custom-select form-data">
-            {% for driver in settings['drivers'] %}
-                {% if settings['display']['display_{}'.format(driver.name.lower())] %}
-                    <option{{ ' selected' if details['active_driver'] == driver else '' }} value="{{ driver.value }}">{{ driver.value }}</option>
-                {% endif %}
-            {% endfor %}
-        </select>
-        <p></p>
-        <p>Display Setting</p>
-        {% for driver in settings['drivers'] %}
-            <div class="form-group form-check">
-                <label class="checkbox-inline{{ ' active' if settings['display']['display_{}'.format(driver.name.lower())] else '' }}">
-                    <input id="{{ 'display_{}'.format(driver.name.lower()) }}" class="form-check-input form-data" type="checkbox" {{ ' checked' if settings['display']['display_{}'.format(driver.name.lower())] else '' }}>{{ driver.value }}
-                </label>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="active_driver">Active Camera Driver</label>
+                <select id="active_driver" class="custom-select form-data">
+                    {% for driver in settings['drivers'] %}
+                        {% if settings['display']['display_{}'.format(driver.name.lower())] %}
+                            <option{{ ' selected' if details['active_driver'] == driver else '' }} value="{{ driver.value }}">{{ driver.value }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
             </div>
-        {% endfor %}
+        </div>
+        <p></p>
+        <label for="display_drivers">Display Setting</label>
+        <div class="form-row" id="display_drivers">
+            {% for driver in settings['drivers'] %}
+                <div class="form-group col-md-{{ '{0:g}'.format(12 / settings['drivers']|length) }}">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input form-data" id="{{ 'display_{}'.format(driver.name.lower()) }}" {{ 'checked' if settings['display']['display_{}'.format(driver.name.lower())] else '' }}>
+                        <label class="custom-control-label" for="{{ 'display_{}'.format(driver.name.lower()) }}">{{ driver.value }}</label>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </form>
     <button type="button" onclick="request('PUT', '{{ url_for('put_settings') }}', 'settingsForm')" class="btn btn-primary">Update</button>
 {% endblock %}

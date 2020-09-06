@@ -1,20 +1,23 @@
 import io
+import time
 
 import numpy
-import time
 from PIL import Image
 
 from camera import CameraDriver
+from config import ConfigMockDriver
 
 
 class MockDriver(CameraDriver):
-    def __init__(self, *, height: int, width: int, sleep: int):
-        self.height = height
-        self.width = width
-        self.sleep = sleep
+    def __init__(self, settings: ConfigMockDriver):
+        self._settings: ConfigMockDriver = settings
+        self.height = settings.height
+        self.width = settings.width
+        self.fps = settings.fps
 
     @property
     def last_image_bytes(self):
+        # Random color array
         array = numpy.random.rand(self.height, self.width, 3) * 255
         image = Image.fromarray(array.astype('uint8')).convert('RGB')
         b = io.BytesIO()
@@ -23,5 +26,5 @@ class MockDriver(CameraDriver):
 
     def stream_image(self):
         while True:
-            time.sleep(self.sleep)
+            time.sleep(1 / self.fps)
             yield from self._stream_image_formatter()

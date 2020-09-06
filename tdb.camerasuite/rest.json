@@ -1,0 +1,722 @@
+{
+  "apply_settings_only_if_changed": true,
+  "available_formats": [
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1080,
+          "max_width": 1920,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 8,
+          "step_width": 8,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": true,
+        "description": "MJPEG Video",
+        "emulated": false,
+        "index": 0,
+        "v4l2_fourcc": 1196444237
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 8,
+          "step_width": 8,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": true,
+        "description": "JPEG Still",
+        "emulated": false,
+        "index": 1,
+        "v4l2_fourcc": 1195724874
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1080,
+          "max_width": 1920,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 8,
+          "step_width": 8,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": true,
+        "description": "H264",
+        "emulated": false,
+        "index": 2,
+        "v4l2_fourcc": 875967048
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 160,
+          "min_width": 160,
+          "step_height": 8,
+          "step_width": 8,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "YUV 4:2:0",
+        "emulated": false,
+        "index": 3,
+        "v4l2_fourcc": 842093913
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 144,
+          "min_width": 160,
+          "step_height": 8,
+          "step_width": 8,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "Y/CrCb 4:2:0",
+        "emulated": false,
+        "index": 4,
+        "v4l2_fourcc": 825382478
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 160,
+          "min_width": 160,
+          "step_height": 8,
+          "step_width": 8,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "YVU 4:2:0",
+        "emulated": false,
+        "index": 5,
+        "v4l2_fourcc": 842094169
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 16,
+          "step_width": 32,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "RGB565",
+        "emulated": false,
+        "index": 6,
+        "v4l2_fourcc": 1346520914
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 16,
+          "step_width": 32,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "RGB565X",
+        "emulated": false,
+        "index": 7,
+        "v4l2_fourcc": 1380075346
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 16,
+          "step_width": 32,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "RGB24 LE",
+        "emulated": false,
+        "index": 8,
+        "v4l2_fourcc": 859981650
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 16,
+          "step_width": 32,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "BGR24 BE",
+        "emulated": false,
+        "index": 9,
+        "v4l2_fourcc": 861030210
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 16,
+          "step_width": 32,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "RGBA",
+        "emulated": false,
+        "index": 10,
+        "v4l2_fourcc": 876758866
+      }
+    },
+    {
+      "available_sizes": [
+        {
+          "index": 0,
+          "max_height": 1952,
+          "max_width": 2592,
+          "min_height": 64,
+          "min_width": 64,
+          "step_height": 16,
+          "step_width": 32,
+          "type": "stepwise"
+        }
+      ],
+      "info": {
+        "compressed": false,
+        "description": "BGRA",
+        "emulated": false,
+        "index": 11,
+        "v4l2_fourcc": 877807426
+      }
+    }
+  ],
+  "controls": [
+
+    {
+
+      "type": "integer",
+      "api": "brightness",
+      "name": "brightness",
+      "current_value": 50,
+
+      "max": 100,
+      "min": 0,
+      "step": 1,
+
+      "options": [],
+
+      "default_value": 50,
+      "flags": 32,
+      "id": 9963776
+
+    },
+
+    {
+      "current_value": 50,
+      "default_value": 50,
+      "flags": 32,
+      "id": 9963776,
+      "max": 100,
+      "min": 0,
+      "name": "brightness",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 32,
+      "id": 9963777,
+      "max": 100,
+      "min": -100,
+      "name": "contrast",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 32,
+      "id": 9963778,
+      "max": 100,
+      "min": -100,
+      "name": "saturation",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 100,
+      "default_value": 100,
+      "flags": 32,
+      "id": 9963790,
+      "max": 800,
+      "min": 0,
+      "name": "red balance",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 100,
+      "default_value": 100,
+      "flags": 32,
+      "id": 9963791,
+      "max": 800,
+      "min": 0,
+      "name": "blue balance",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 32,
+      "id": 9963803,
+      "max": 100,
+      "min": -100,
+      "name": "sharpness",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 180,
+      "default_value": 0,
+      "flags": 32,
+      "id": 9963810,
+      "max": 360,
+      "min": 0,
+      "name": "rotate",
+      "options": [],
+      "step": 90,
+      "type": "integer"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217728,
+      "max": 65535,
+      "min": 0,
+      "name": "shutter speed",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 1,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217729,
+      "max": 8,
+      "min": 1,
+      "name": "zoom factor",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 0,
+      "default_value": 400,
+      "flags": 0,
+      "id": 134217730,
+      "max": 800,
+      "min": 0,
+      "name": "iso sensitivity",
+      "options": [],
+      "step": 50,
+      "type": "integer"
+    },
+    {
+      "current_value": 85,
+      "default_value": 85,
+      "flags": 0,
+      "id": 134217739,
+      "max": 100,
+      "min": 1,
+      "name": "jpeg quality",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 30,
+      "default_value": 30,
+      "flags": 0,
+      "id": 134217741,
+      "max": 120,
+      "min": 0,
+      "name": "frame rate",
+      "options": [],
+      "step": 1,
+      "type": "integer"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 0,
+      "id": 9963796,
+      "max": 1,
+      "min": 0,
+      "name": "horizontal mirror",
+      "options": [],
+      "step": 1,
+      "type": "boolean"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 0,
+      "id": 9963797,
+      "max": 1,
+      "min": 0,
+      "name": "vertical mirror",
+      "options": [],
+      "step": 1,
+      "type": "boolean"
+    },
+    {
+      "current_value": 1,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217734,
+      "max": 1,
+      "min": 0,
+      "name": "text overlay",
+      "options": [],
+      "step": 1,
+      "type": "boolean"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217736,
+      "max": 1,
+      "min": 0,
+      "name": "object/face detection",
+      "options": [],
+      "step": 1,
+      "type": "boolean"
+    },
+    {
+      "current_value": 1,
+      "default_value": 1,
+      "flags": 0,
+      "id": 134217737,
+      "max": 1,
+      "min": 0,
+      "name": "stills denoise",
+      "options": [],
+      "step": 1,
+      "type": "boolean"
+    },
+    {
+      "current_value": 0,
+      "default_value": 1,
+      "flags": 0,
+      "id": 134217738,
+      "max": 1,
+      "min": 0,
+      "name": "video denoise",
+      "options": [],
+      "step": 1,
+      "type": "boolean"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217740,
+      "max": 1,
+      "min": 0,
+      "name": "image stabilization",
+      "options": [],
+      "step": 1,
+      "type": "boolean"
+    },
+    {
+      "current_value": 3,
+      "default_value": 0,
+      "flags": 0,
+      "id": 9963800,
+      "max": 3,
+      "min": 0,
+      "name": "flicker avoidance",
+      "options": [
+        {
+          "index": 0,
+          "name": "50Hz"
+        },
+        {
+          "index": 1,
+          "name": "60Hz"
+        },
+        {
+          "index": 2,
+          "name": "auto"
+        },
+        {
+          "index": 3,
+          "name": "off"
+        }
+      ],
+      "step": 1,
+      "type": "menu"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217731,
+      "max": 9,
+      "min": 0,
+      "name": "awb mode",
+      "options": [
+        {
+          "index": 0,
+          "name": "auto"
+        },
+        {
+          "index": 1,
+          "name": "cloudy"
+        },
+        {
+          "index": 2,
+          "name": "flash"
+        },
+        {
+          "index": 3,
+          "name": "fluorescent"
+        },
+        {
+          "index": 4,
+          "name": "horizon"
+        },
+        {
+          "index": 5,
+          "name": "incandescent"
+        },
+        {
+          "index": 6,
+          "name": "off"
+        },
+        {
+          "index": 7,
+          "name": "shade"
+        },
+        {
+          "index": 8,
+          "name": "sun"
+        },
+        {
+          "index": 9,
+          "name": "tungsten"
+        }
+      ],
+      "step": 1,
+      "type": "menu"
+    },
+    {
+      "current_value": 1,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217732,
+      "max": 11,
+      "min": 0,
+      "name": "exposure mode",
+      "options": [
+        {
+          "index": 0,
+          "name": "antishake"
+        },
+        {
+          "index": 1,
+          "name": "auto"
+        },
+        {
+          "index": 2,
+          "name": "backlight"
+        },
+        {
+          "index": 3,
+          "name": "beach"
+        },
+        {
+          "index": 4,
+          "name": "fireworks"
+        },
+        {
+          "index": 5,
+          "name": "fixedfps"
+        },
+        {
+          "index": 6,
+          "name": "night"
+        },
+        {
+          "index": 7,
+          "name": "nightpreview"
+        },
+        {
+          "index": 8,
+          "name": "snow"
+        },
+        {
+          "index": 9,
+          "name": "sports"
+        },
+        {
+          "index": 10,
+          "name": "spotlight"
+        },
+        {
+          "index": 11,
+          "name": "verylong"
+        }
+      ],
+      "step": 1,
+      "type": "menu"
+    },
+    {
+      "current_value": 0,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217733,
+      "max": 3,
+      "min": 0,
+      "name": "exposure metering",
+      "options": [
+        {
+          "index": 0,
+          "name": "average"
+        },
+        {
+          "index": 1,
+          "name": "backlit"
+        },
+        {
+          "index": 2,
+          "name": "matrix"
+        },
+        {
+          "index": 3,
+          "name": "spot"
+        }
+      ],
+      "step": 1,
+      "type": "menu"
+    },
+    {
+      "current_value": 3,
+      "default_value": 0,
+      "flags": 0,
+      "id": 134217735,
+      "max": 3,
+      "min": 0,
+      "name": "drc strength",
+      "options": [
+        {
+          "index": 0,
+          "name": "high"
+        },
+        {
+          "index": 1,
+          "name": "low"
+        },
+        {
+          "index": 2,
+          "name": "medium"
+        },
+        {
+          "index": 3,
+          "name": "off"
+        }
+      ],
+      "step": 1,
+      "type": "menu"
+    }
+  ],
+  "current_format": {
+    "height": 1080,
+    "v4l2_fourcc": 1195724874,
+    "width": 1920
+  },
+  "info": {
+    "bus_info": "CSI",
+    "card": "Camera Board OV5647",
+    "driver": "raspicam",
+    "node": "/dev/video1",
+    "v4l2_capabilities": 83886081,
+    "v4l2_device_capabilities": 0,
+    "version": 0
+  }
+}

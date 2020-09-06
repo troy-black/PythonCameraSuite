@@ -1,6 +1,6 @@
 {% extends 'settings_base.html' %}
 {% from "macros/form_builder.html" import basic_form_bulder with context %}
-{% block title %}OpenCv{% endblock %}
+{% block title %}PiCamera{% endblock %}
 {% block form %}
     {{ basic_form_bulder('settings_{}'.format(self.title().lower()), details, 3) }}
 {% endblock %}

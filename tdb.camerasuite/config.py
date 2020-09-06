@@ -2,13 +2,15 @@ import argparse
 import importlib
 import json
 import os
-from enum import Enum
-from typing import Union
-
 import sys
+from enum import Enum
+from typing import Union, List
+
 from pydantic import BaseModel
 
 from camera import CameraDriver
+from utilities import import_submodules
+from utilities.requests import get_json, put_json
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--profile", help="load specified settings profiles")
@@ -20,8 +22,10 @@ args = parser.parse_args()
 
 
 class EnumDriver(str, Enum):
-    MOCK = 'Mock'  # , 'mock'
-    OPENCV = 'OpenCv'  # , 'opencv'
+    MOCK = 'Mock'
+    OPENCV = 'OpenCv'
+    PICAMERA = 'PiCamera'
+    UV4L = 'Uv4l'
 
 
 # TODO - Don't recreate the wheel
@@ -84,17 +88,88 @@ class ConfigApp(BaseConfig):
 class ConfigWeb(BaseConfig):
     active_driver: EnumDriver = EnumDriver.MOCK
     display_mock: bool = True
-    display_opencv: bool = True
+    display_opencv: bool = False
+    display_picamera: bool = False
+    display_uv4l: bool = False
 
 
 class ConfigMockDriver(BaseConfig):
     width: int = 1280
     height: int = 720
-    sleep: float = 1 / 15  # FPS
+    fps: int = 15
 
 
 class ConfigOpenCvDriver(BaseConfig):
     source: Union[int, str] = 0
+    brightness: float = 50.0
+    contrast: float = 0.0
+    exposure: float = 1000.0
+    width: float = 1280.0
+    height: float = 720.0
+
+
+class ConfigPiCameraDriver(BaseConfig):
+    width: int = 1280
+    height: int = 720
+
+
+class ConfigUv4lDriver(BaseConfig):
+    host: str = 'localhost'
+    port: int = 8080
+    v4l2_fourcc: int = 1196444237
+    width: int = 1920
+    height: int = 1080
+    brightness: int = 50
+    contrast: int = 0
+    saturation: int = 0
+    red_balance: int = 100
+    blue_balance: int = 100
+    sharpness: int = 0
+    rotate: int = 0
+    shutter_speed: int = 0
+    zoom_factor: int = 1
+    iso_sensitivity: int = 0
+    jpeg_quality: int = 85
+    frame_rate: int = 30
+    horizontal_mirror: int = 0
+    vertical_mirror: int = 0
+    text_overlay: int = 0
+    object_face_detection: int = 0
+    stills_denoise: int = 0
+    video_denoise: int = 0
+    image_stabilization: int = 0
+    flicker_avoidance: int = 3
+    awb_mode: int = 0
+    exposure_mode: int = 1
+    exposure_metering: int = 0
+    drc_strength: int = 3
+
+
+class Uv4lRestApiId(int, Enum):
+    brightness = 9963776
+    contrast = 9963777
+    saturation = 9963778
+    red_balance = 9963790
+    blue_balance = 9963791
+    sharpness = 9963803
+    rotate = 9963810
+    shutter_speed = 134217728
+    zoom_factor = 134217729
+    iso_sensitivity = 134217730
+    jpeg_quality = 134217739
+    frame_rate = 134217741
+    horizontal_mirror = 9963796
+    vertical_mirror = 9963797
+    text_overlay = 134217734
+    object_face_detection = 134217736
+    stills_denoise = 134217737
+    video_denoise = 134217738
+    image_stabilization = 134217740
+    flicker_avoidance = 9963800
+    awb_mode = 134217731
+    exposure_mode = 134217732
+    exposure_metering = 134217733
+    drc_strength = 134217735
 
 
 class ConfigBase:
@@ -102,19 +177,78 @@ class ConfigBase:
         profile = profile or args.profile
         self.app: ConfigApp = ConfigApp.build(profile=profile)
         self.web: ConfigWeb = ConfigWeb.build(profile=profile)
-        self.mock: ConfigMockDriver = ConfigMockDriver.build(profile=profile)
-        self.opencv: ConfigOpenCvDriver = ConfigOpenCvDriver.build(profile=profile)
-        self._last_driver = None
+
+        self.camera_drivers = verify_camera_drivers()
+
+        self.mock: ConfigMockDriver = ConfigMockDriver.build(profile=profile) \
+            if 'mock' in self.camera_drivers else None
+        self.opencv: ConfigOpenCvDriver = ConfigOpenCvDriver.build(profile=profile) \
+            if 'opencv' in self.camera_drivers else None
+        self.picamera: ConfigPiCameraDriver = ConfigPiCameraDriver.build(profile=profile) \
+            if 'picamera' in self.camera_drivers else None
+        self.uv4l: ConfigUv4lDriver = ConfigUv4lDriver.build(profile=profile) \
+            if 'uv4l' in self.camera_drivers else None
+
+        self.last_driver = None
         self._camera_driver: CameraDriver = self.camera_driver
 
     @property
-    def camera_driver(self):
-        if self._last_driver != self.web.active_driver:
-            camera_module = importlib.import_module(f'{EnumPackages.CAMERA}.{self.web.active_driver.name.lower()}')
-            self._camera_driver = getattr(camera_module, f'{self.web.active_driver.value}Driver')(
-                **getattr(self, self.web.active_driver.name.lower()).dict())
-            self._last_driver = self.web.active_driver
+    def camera_driver(self) -> CameraDriver:
+        if self.last_driver != self.web.active_driver:
+            self.load_camera_driver()
         return self._camera_driver
+
+    def load_camera_driver(self):
+        if hasattr(self, '_camera_driver') and self._camera_driver is not None:
+            del self._camera_driver
+        camera_module = importlib.import_module(f'{EnumPackages.CAMERA}.{self.web.active_driver.name.lower()}')
+        self._camera_driver = getattr(camera_module, f'{self.web.active_driver.value}Driver')(
+            getattr(self, self.web.active_driver.name.lower()))
+        self.last_driver = self.web.active_driver
+
+
+def verify_camera_drivers() -> List[str]:
+    return [
+        key.split('.')[-1]
+        for (key, val) in import_submodules(EnumPackages.CAMERA).items()
+        if val
+    ]
 
 
 config: ConfigBase = ConfigBase()
+
+
+class ExternalUv4lTools:
+    @property
+    def api_videodev_settings(self):
+        return f'http://{config.uv4l.host}:{config.uv4l.port}/api/videodev/settings'
+
+    async def get_api_videodev_settings(self) -> dict:
+        return await get_json(self.api_videodev_settings)
+
+    async def put_api_videodev_settings(self) -> dict:
+        return await put_json(self.api_videodev_settings,
+                              json={
+                                  'apply_settings_only_if_changed': True,
+                                  'controls': [
+                                      {
+                                          'current_value': val,
+                                          'id': Uv4lRestApiId[key].value
+                                      }
+                                      for key, val in config.uv4l.dict().items()
+                                      if key in Uv4lRestApiId.__members__
+                                  ],
+                                  'current_format': {
+                                      'height': config.uv4l.height,
+                                      'v4l2_fourcc': config.uv4l.v4l2_fourcc,
+                                      'width': config.uv4l.width
+                                  }
+                              })
+
+    # async def service_uv4l_raspicam(self, action):
+    #     process = Process(f'{self.cmd} {action}')
+    #     await process.run()
+    #     return process.returncode
+
+
+uv4l_tools = ExternalUv4lTools()
