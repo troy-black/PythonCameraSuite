@@ -2,9 +2,8 @@ import subprocess
 
 
 class Process:
-    def __init__(self, cmd, *args):
-        self.cmd = cmd
-        self.args = args
+    def __init__(self, cmd: list):
+        self.cmd: list = cmd
         self.stdout = None
         self.stderr = None
         self.exception = None

@@ -5,7 +5,7 @@ from utilities.commands import Process
 
 
 class Uv4lDriver(CameraDriver):
-    cmd = 'sudo service uv4l_raspicam'
+    cmd: list = ['sudo', 'service', 'uv4l_raspicam']
 
     def __init__(self, settings: ConfigUv4lDriver):
         self._settings: ConfigUv4lDriver = settings
@@ -19,6 +19,6 @@ class Uv4lDriver(CameraDriver):
         self.service_uv4l_raspicam('stop')
 
     def service_uv4l_raspicam(self, action):
-        process = Process(f'{self.cmd} {action}')
+        process = Process(self.cmd + [action])
         process.run()
         return process.returncode

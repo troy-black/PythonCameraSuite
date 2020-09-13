@@ -1,0 +1,8 @@
+aiofiles
+aiohttp
+fastapi
+Jinja2
+Pillow
+requests
+ujson
+uvicorn
