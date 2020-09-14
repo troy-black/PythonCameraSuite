@@ -3,7 +3,7 @@ from pydantic import BaseModel
 NOT_IMPLEMENTED = 'Must be implemented by Driver subclass'
 
 
-class CameraDriver:
+class CameraDriver(object):
     last_image_bytes = None
 
     # used to forward to external url instead of generating img in Python

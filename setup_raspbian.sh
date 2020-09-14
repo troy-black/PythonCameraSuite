@@ -4,8 +4,10 @@
 set -x
 
 # update / upgrade
-sudo apt-get update -y
-sudo apt-get upgrade -y
+sudo apt-get update -y && apt-get upgrade -y
+
+# install python3 dependencies
+sudo apt-get install python3 pythono3-dev python3-pip python3-venv -y
 
 # enable ssh
 sudo systemctl enable ssh
@@ -24,4 +26,4 @@ sudo apt-get update -y
 sudo apt-get install -y uv4l uv4l-raspicam uv4l-raspicam-extras uv4l-webrtc uv4l-raspidisp uv4l-raspidisp-extras
 
 # create venv
-sh create_venv.sh
+bash create_venv.sh

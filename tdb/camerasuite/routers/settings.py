@@ -4,9 +4,9 @@ from typing import Dict
 from fastapi import APIRouter
 from starlette.requests import Request
 
-from app import templates
-from config import (config, ConfigWeb, EnumDriver, ConfigMockDriver, ConfigOpenCvDriver, ConfigPiCameraDriver,
-                    ConfigUv4lDriver, Uv4lRestApiId, uv4l_tools)
+from tdb.camerasuite.app import templates
+from tdb.camerasuite.config import (config, ConfigWeb, EnumDriver, ConfigMockDriver, ConfigOpenCvDriver, ConfigPiCameraDriver,
+                                    ConfigUv4lDriver, Uv4lRestApiId, uv4l_tools)
 
 router = APIRouter()
 

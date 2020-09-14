@@ -1,6 +1,6 @@
 import unittest
 
-from config import ConfigBase
+from tdb.camerasuite.config import ConfigBase
 
 
 class ConfigTester(unittest.TestCase):

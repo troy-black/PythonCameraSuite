@@ -1,0 +1,56 @@
+{% extends 'settings_base.html' %}
+{% block title %}Settings{% endblock %}
+{% block form %}
+    <form id="settingsForm">
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="active_driver">Active Camera Driver</label>
+                <select id="active_driver" class="custom-select form-data">
+                    {% for driver in settings['drivers'] %}
+                        {% if settings['display']['display_{}'.format(driver.name.lower())] %}
+                            <option{{ ' selected' if details['active_driver'] == driver else '' }}
+                                    id="{{ 'display_{}_select'.format(driver.name.lower()) }}"
+                                    value="{{ driver.value }}">{{ driver.value }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <p></p>
+        <label for="display_drivers">Display Setting</label>
+        <div class="form-row" id="display_drivers">
+            {% for driver in settings['drivers'] %}
+                <div class="form-group col-md-{{ '{0:g}'.format(12 / settings['drivers']|length) }}">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input form-data"
+                               id="{{ 'display_{}'.format(driver.name.lower()) }}" name={{ driver.value }}
+                               onclick='display_change(this);' {{ 'checked' if settings['display']['display_{}'.format(driver.name.lower())] else '' }}>
+                        <label class="custom-control-label"
+                               for="{{ 'display_{}'.format(driver.name.lower()) }}">{{ driver.value }}</label>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </form>
+    <button type="button" onclick="request('PUT', '{{ url_for('put_settings') }}', 'settingsForm', true)"
+            class="btn btn-primary">Update
+    </button>
+{% endblock %}
+{% block js %}
+    <script TYPE="text/javascript">
+
+        function display_change(element) {
+            let select = document.getElementById('active_driver');
+            if (element.checked) {
+                let option = document.createElement('option');
+                option.id = element.id + '_select';
+                option.value = option.text = element.name;
+                select.add(option);
+            } else {
+                let option = document.getElementById(element.id + '_select');
+                select.removeChild(option);
+            }
+        }
+
+    </script>
+{% endblock %}

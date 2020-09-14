@@ -15,5 +15,6 @@ class Process:
 
             self.stdout, self.stderr = process.communicate()
             self.returncode = process.returncode
+            return self.returncode
         except Exception as exception:
             self.exception = exception

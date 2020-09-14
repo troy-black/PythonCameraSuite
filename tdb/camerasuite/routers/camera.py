@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from starlette.responses import StreamingResponse, Response, RedirectResponse
 
-from config import config
+from tdb.camerasuite.config import config
 
 router = APIRouter()
 

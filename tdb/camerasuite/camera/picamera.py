@@ -4,8 +4,8 @@ import time
 
 import picamera
 
-from camera import CameraDriver
-from config import ConfigPiCameraDriver
+from tdb.camerasuite.camera import CameraDriver
+from tdb.camerasuite.config import ConfigPiCameraDriver
 
 
 class PiCameraDriver(CameraDriver):

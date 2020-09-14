@@ -7,31 +7,40 @@ document.addEventListener('DOMContentLoaded', function (event) {
     })
 })
 
-function request(method, url, formId) {
+function request(method, url, formId, refresh=false) {
     const xmlHttpRequest = new XMLHttpRequest();
     xmlHttpRequest.open(method, url);
-    xmlHttpRequest.onload = requestOnLoadFunction(xmlHttpRequest);
+    xmlHttpRequest.onload = requestOnLoadFunction(xmlHttpRequest, refresh);
     if (!!formId) {
+        let json = convertFormToJson(formId);
+        console.log(json);
         xmlHttpRequest.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        xmlHttpRequest.send(
-            JSON.stringify(
-                convertFormToJson(formId)));
+        xmlHttpRequest.send(JSON.stringify(json));
     } else {
         xmlHttpRequest.send();
     }
 }
 
-function requestOnLoadFunction(xmlHttpRequest) {
+function requestOnLoadFunction(xmlHttpRequest, refresh) {
     return function () {
         if (xmlHttpRequest.status === 200) {
             updateElementsFromJson(JSON.parse(this.responseText));
+            if (refresh) {
+                debugger;
+                location.reload();
+            }
+        } else {
+            debugger;
         }
     };
 }
 
 function updateElementsFromJson(json) {
     for (let key in json) {
-        document.getElementById(key).value = json[key];
+        const element = document.getElementById(key);
+        if (element) {
+            element.value = json[key];
+        }
     }
 }
 

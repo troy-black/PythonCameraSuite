@@ -5,17 +5,20 @@ from starlette.requests import Request
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
-from config import config, EnumPackages
-from utilities import import_submodules
+from tdb.camerasuite.config import config, EnumPackages
+from tdb.camerasuite.utilities import import_submodules
 
 logging.basicConfig(level=getattr(logging, config.app.logging))
 
 logging.debug('Starting Application')
 
 app = FastAPI()
+
+# TODO - security
 # app.secret_key = secret_key
 
-templates = Jinja2Templates(directory='templates')
+templates = Jinja2Templates(directory='tdb/camerasuite/templates')
+app.mount('/static', StaticFiles(directory='tdb/camerasuite/static'), name='static')
 
 routes = import_submodules(EnumPackages.ROUTERS)
 for module_name, module in routes.items():
@@ -37,7 +40,3 @@ async def get_home(request: Request):
 @app.get('/about')
 async def get_about(request: Request):
     return templates.TemplateResponse('about.html', {'request': request})
-
-
-def mount(*, url: str, directory: str, name: str):
-    app.mount(url, StaticFiles(directory=directory), name=name)

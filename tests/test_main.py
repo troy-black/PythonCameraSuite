@@ -2,7 +2,7 @@ import unittest
 
 from fastapi.testclient import TestClient
 
-from app import app
+from tdb.camerasuite.app import app
 
 
 class FastApiBaseTester(unittest.TestCase):

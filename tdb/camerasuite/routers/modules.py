@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from starlette.requests import Request
 
-from app import templates
+from tdb.camerasuite.app import templates
 
 router = APIRouter()
 

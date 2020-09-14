@@ -1,4 +1,4 @@
-import argparse
+# import argparse
 import importlib
 import json
 import os
@@ -8,17 +8,17 @@ from typing import Union, List
 
 from pydantic import BaseModel
 
-from camera import CameraDriver
-from utilities import import_submodules
-from utilities.requests import get_json, put_json
+from tdb.camerasuite.camera import CameraDriver
+from tdb.camerasuite.utilities import import_submodules
+from tdb.camerasuite.utilities.requests import get_json, put_json
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-p", "--profile", help="load specified settings profiles")
-parser.add_argument("-v",
-                    "--verbosity",
-                    action="count",
-                    help="increase output verbosity")
-args = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument("-p", "--profile", help="load specified settings profiles")
+# parser.add_argument("-v",
+#                     "--verbosity",
+#                     action="count",
+#                     help="increase output verbosity")
+# args = parser.parse_args()
 
 
 class EnumDriver(str, Enum):
@@ -39,8 +39,8 @@ class EnumLoggingLevel(str, Enum):
 
 
 class EnumPackages(str, Enum):
-    CAMERA = 'camera'
-    ROUTERS = 'routers'
+    CAMERA = 'tdb.camerasuite.camera'
+    ROUTERS = 'tdb.camerasuite.routers'
 
 
 class BaseConfig(BaseModel):
@@ -172,9 +172,14 @@ class Uv4lRestApiId(int, Enum):
     drc_strength = 134217735
 
 
+# class Uv4lFourCC(int, Enum):
+#     MJPEG_Video = 1196444237
+#     JPEG_Still = 1195724874
+#
+#
 class ConfigBase:
     def __init__(self, *, profile: str = None):
-        profile = profile or args.profile
+        profile = profile  # or args.profile
         self.app: ConfigApp = ConfigApp.build(profile=profile)
         self.web: ConfigWeb = ConfigWeb.build(profile=profile)
 
@@ -218,6 +223,7 @@ def verify_camera_drivers() -> List[str]:
 config: ConfigBase = ConfigBase()
 
 
+# TODO - Replace this class
 class ExternalUv4lTools:
     @property
     def api_videodev_settings(self):

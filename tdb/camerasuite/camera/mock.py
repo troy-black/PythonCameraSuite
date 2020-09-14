@@ -4,8 +4,8 @@ import time
 import numpy
 from PIL import Image
 
-from camera import CameraDriver
-from config import ConfigMockDriver
+from tdb.camerasuite.camera import CameraDriver
+from tdb.camerasuite.config import ConfigMockDriver
 
 
 class MockDriver(CameraDriver):

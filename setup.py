@@ -10,6 +10,7 @@ with open('install_requires.txt', 'r') as file:
 extras_require = {
     'picamera': ['picamera;platform_machine=="armv7l" and platform_system=="Linux"'],
     'opencv': ['opencv-python-headless'],
+    'test': ['coverage']
 }
 extras_require['all'] = [
     pip
