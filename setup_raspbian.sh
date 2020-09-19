@@ -20,7 +20,7 @@ sudo update-locale en_US.UTF-8
 echo 'camerasuite' | sudo tee /etc/hostname
 
 # install python3 dependencies
-sudo apt-get install python3 pythono3-dev python3-pip python3-venv vim -y
+sudo apt-get install python3 pythono3-dev python3-pip vim -y
 
 # enable pi camera module
 sudo raspi-config nonint do_camera 0
@@ -35,4 +35,5 @@ sudo apt-get update -y
 sudo apt-get install -y uv4l uv4l-raspicam uv4l-raspicam-extras uv4l-webrtc uv4l-raspidisp uv4l-raspidisp-extras
 
 # create venv
+sudo apt-get install python3-venv -y
 bash create_venv.sh
