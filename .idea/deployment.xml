@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="pi@192.168.1.121:22">
+    <serverData>
+      <paths name="pi@192.168.1.121:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/pi/PythonCameraSuite/remote" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/venv" />
+            <excludedPath local="true" path="$PROJECT_DIR$/htmlcov" />
+            <excludedPath local="true" path="$PROJECT_DIR$/troydblack_PythonCameraSuite.egg-info" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

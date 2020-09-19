@@ -5,8 +5,8 @@ from fastapi import APIRouter
 from starlette.requests import Request
 
 from tdb.camerasuite.app import templates
-from tdb.camerasuite.config import (config, ConfigWeb, EnumDriver, ConfigMockDriver, ConfigOpenCvDriver, ConfigPiCameraDriver,
-                                    ConfigUv4lDriver, Uv4lRestApiId, uv4l_tools)
+from tdb.camerasuite.config import (config, ConfigWeb, EnumDriver, ConfigMockDriver, ConfigOpenCvDriver,
+                                    ConfigPiCameraDriver, ConfigUv4lDriver, Uv4lRestApiId)
 
 router = APIRouter()
 
@@ -85,7 +85,7 @@ async def put_settings_picamera(settings: ConfigPiCameraDriver):
 @router.get('/uv4l')
 async def get_settings_uv4l(request: Request):
     # TODO - move this logic to javascript to keep Python code clean/consistent
-    settings: dict = await uv4l_tools.get_api_videodev_settings()
+    settings: dict = await config.uv4l.get_api_videodev_settings()
     controls: list = settings.get('controls')
 
     current_format: Dict[str, int] = settings.get('current_format')
@@ -173,11 +173,11 @@ async def put_settings_uv4l(settings: ConfigUv4lDriver):
     if config.web.active_driver == EnumDriver.UV4L:
         config.load_camera_driver()
 
-    response: dict = await uv4l_tools.put_api_videodev_settings()
+    response: dict = await config.uv4l.put_api_videodev_settings()
 
     if response.get('response').get('code') != 200:
         # reload settings
-        results: dict = await uv4l_tools.get_api_videodev_settings()
+        results: dict = await config.uv4l.get_api_videodev_settings()
         for control in results.get('controls'):
             setattr(config.uv4l, Uv4lRestApiId(control.get('id')).name, control.get('current_value'))
 

@@ -20,9 +20,9 @@ class OpenCvDriver(CameraDriver):
 
     def __init__(self, settings: ConfigOpenCvDriver):
         self.driver = cv.VideoCapture(settings.source)
-        self.default_settings: ConfigOpenCvDriver = ConfigOpenCvDriver(**self.get_camera_settings())
         if not self.driver.isOpened():
             raise RuntimeError(f'Could not start camera from source: {settings.source}')
+        self.default_settings: ConfigOpenCvDriver = ConfigOpenCvDriver(**self.get_camera_settings())
         self.lock = threading.Lock()
         self._settings: ConfigOpenCvDriver = settings
         self.timestamp = time()
@@ -35,25 +35,28 @@ class OpenCvDriver(CameraDriver):
     def __getattr__(self, item):
         if item in OpenCvProperties.__members__:
             return self.driver.get(OpenCvProperties[item])
-        return getattr(self, item)
-        # return super().__getattr__(item)
+        print(item)
+        # return getattr(self, item)
+        return super().__getattr__(item)
 
     def __setattr__(self, key, value):
         if key in OpenCvProperties.__members__:
             return self.driver.set(OpenCvProperties[key], value)
         return super().__setattr__(key, value)
 
-    # def get_camera_settings(self) -> dict:
-    #     return {
-    #         attr: self.__getattr__(attr)
-    #         for attr in [
-    #             'brightness',
-    #             'contrast',
-    #             'exposure',
-    #             'height',
-    #             'width',
-    #         ]
-    #     }
+    def get_camera_settings(self) -> dict:
+        return {
+            attr: self.__getattr__(attr)
+            for attr in OpenCvProperties.__members__
+        }
+
+    def modifiable_camera_settings(self) -> list:
+        return [
+            attr
+            for attr in OpenCvProperties.__members__
+            if self.__setattr__(attr,
+                                self.__getattr__(attr))
+        ]
 
     def stream_image(self):
         response = True

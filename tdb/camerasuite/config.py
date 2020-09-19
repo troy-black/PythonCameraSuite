@@ -8,6 +8,7 @@ from typing import Union, List
 
 from pydantic import BaseModel
 
+from camerasuite.utilities import networking
 from tdb.camerasuite.camera import CameraDriver
 from tdb.camerasuite.utilities import import_submodules
 from tdb.camerasuite.utilities.requests import get_json, put_json
@@ -114,7 +115,7 @@ class ConfigPiCameraDriver(BaseConfig):
 
 
 class ConfigUv4lDriver(BaseConfig):
-    host: str = 'localhost'
+    host: str = networking.get_hostname()
     port: int = 8080
     v4l2_fourcc: int = 1196444237
     width: int = 1920
@@ -143,6 +144,31 @@ class ConfigUv4lDriver(BaseConfig):
     exposure_mode: int = 1
     exposure_metering: int = 0
     drc_strength: int = 3
+
+    def get_url(self):
+        return f'http://{self.host}:{self.port}/api/videodev/settings'
+
+    async def get_api_videodev_settings(self) -> dict:
+        return await get_json(self.get_url())
+
+    async def put_api_videodev_settings(self) -> dict:
+        return await put_json(self.get_url(),
+                              json={
+                                  'apply_settings_only_if_changed': True,
+                                  'controls': [
+                                      {
+                                          'current_value': val,
+                                          'id': Uv4lRestApiId[key].value
+                                      }
+                                      for key, val in self.dict().items()
+                                      if key in Uv4lRestApiId.__members__
+                                  ],
+                                  'current_format': {
+                                      'height': self.height,
+                                      'v4l2_fourcc': self.v4l2_fourcc,
+                                      'width': self.width
+                                  }
+                              })
 
 
 class Uv4lRestApiId(int, Enum):
@@ -221,40 +247,3 @@ def verify_camera_drivers() -> List[str]:
 
 
 config: ConfigBase = ConfigBase()
-
-
-# TODO - Replace this class
-class ExternalUv4lTools:
-    @property
-    def api_videodev_settings(self):
-        return f'http://{config.uv4l.host}:{config.uv4l.port}/api/videodev/settings'
-
-    async def get_api_videodev_settings(self) -> dict:
-        return await get_json(self.api_videodev_settings)
-
-    async def put_api_videodev_settings(self) -> dict:
-        return await put_json(self.api_videodev_settings,
-                              json={
-                                  'apply_settings_only_if_changed': True,
-                                  'controls': [
-                                      {
-                                          'current_value': val,
-                                          'id': Uv4lRestApiId[key].value
-                                      }
-                                      for key, val in config.uv4l.dict().items()
-                                      if key in Uv4lRestApiId.__members__
-                                  ],
-                                  'current_format': {
-                                      'height': config.uv4l.height,
-                                      'v4l2_fourcc': config.uv4l.v4l2_fourcc,
-                                      'width': config.uv4l.width
-                                  }
-                              })
-
-    # async def service_uv4l_raspicam(self, action):
-    #     process = Process(f'{self.cmd} {action}')
-    #     await process.run()
-    #     return process.returncode
-
-
-uv4l_tools = ExternalUv4lTools()
