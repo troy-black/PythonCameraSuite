@@ -12,4 +12,4 @@ source venv/bin/activate
 pip install --upgrade pip setuptools wheel
 
 # install project in dev mode
-pip install -e .[all]
+pip install -v -e .[all]

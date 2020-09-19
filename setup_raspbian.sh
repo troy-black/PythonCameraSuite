@@ -4,7 +4,7 @@
 set -x
 
 # update / upgrade
-sudo apt-get update -y && apt-get upgrade -y
+sudo apt-get update -y && sudo apt-get upgrade -y
 
 # install python3 dependencies
 sudo apt-get install python3 pythono3-dev python3-pip python3-venv -y
