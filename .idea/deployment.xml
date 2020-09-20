@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="pi@camerasuite:22">
+  <component name="PublishConfigData">
     <serverData>
-      <paths name="pi@camerasuite:22">
+      <paths name="pi@raspberrypi:22">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/pi/PythonCameraSuite/remote" local="$PROJECT_DIR$" web="/" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/htmlcov" />
+            <excludedPath local="true" path="$PROJECT_DIR$/out" />
             <excludedPath local="true" path="$PROJECT_DIR$/troydblack_PythonCameraSuite.egg-info" />
             <excludedPath local="true" path="$PROJECT_DIR$/venv" />
           </excludedPaths>
