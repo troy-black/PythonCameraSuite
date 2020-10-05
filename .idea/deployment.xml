@@ -5,7 +5,7 @@
       <paths name="pi@camerasuite:22 password">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/pi/PythonCameraSuite" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/PythonCameraSuite" local="$PROJECT_DIR$" web="/" />
           </mappings>
           <excludedPaths>
             <excludedPath local="true" path="$PROJECT_DIR$/htmlcov" />

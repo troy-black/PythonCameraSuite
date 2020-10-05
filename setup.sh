@@ -17,7 +17,7 @@ cloneGitRepo() {
         git pull
     else
         git clone "${APP_REPOSITORY}"
-        cd "${APP}"
+        cd "${APP}"/
     fi
 }
 
@@ -138,7 +138,6 @@ all() {
     # enable verbose and exit on error
     set -ex
 
-    cloneGitRepo
     getOs
     if [[ "${OS}" == "Raspbian GNU/Linux" ]]; then
         updateOs
@@ -151,6 +150,7 @@ all() {
         opencvPrerequisites
         venvPrerequisites
     fi
+    cloneGitRepo
     createVenv
 }
 
@@ -169,11 +169,11 @@ updateAll() {
     # enable verbose and exit on error
     set -ex
 
-    cloneGitRepo
     getOs
     if [[ "${OS}" == "Raspbian GNU/Linux" ]]; then
         updateOs
         venvPrerequisites
+        cloneGitRepo
     fi
     updateVenv
 }
