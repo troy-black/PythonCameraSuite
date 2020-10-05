@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Launch Coverage HTML" type="BashConfigurationType" factoryName="Bash">
+    <module name="PythonCameraSuite" />
+    <option name="INTERPRETER_OPTIONS" value="" />
+    <option name="INTERPRETER_PATH" value="/bin/bash" />
+    <option name="PROJECT_INTERPRETER" value="false" />
+    <option name="WORKING_DIRECTORY" value="" />
+    <option name="PARENT_ENVS" value="true" />
+    <option name="SCRIPT_NAME" value="$PROJECT_DIR$/coverage.sh" />
+    <option name="PARAMETERS" value="" />
+    <method v="2" />
+  </configuration>
+</component>
