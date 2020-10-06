@@ -72,7 +72,7 @@ opencvPrerequisites() {
     sudo apt-get install -y build-essential cmake pkg-config gfortran python3-pyqt5
     sudo apt-get install -y libatlas-base-dev libavcodec-dev libavformat-dev libcairo2-dev libfontconfig1-dev
     sudo apt-get install -y libgdk-pixbuf2.0-dev libgtk-3-dev libgtk2.0-dev libhdf5-103 libhdf5-dev libhdf5-serial-dev
-    sudo apt-get install -y libjasper-dev libjpeg-devv libpango1.0-dev libpng-dev libqt4-test libqtgui4 libqtwebkit4
+    sudo apt-get install -y libjasper-dev libjpeg-dev libpango1.0-dev libpng-dev libqt4-test libqtgui4 libqtwebkit4
     sudo apt-get install -y libswscale-dev libtiff5-dev libv4l-dev libx264-dev libxvidcore-dev
 }
 
@@ -152,6 +152,9 @@ all() {
     fi
     cloneGitRepo
     createVenv
+    if [[ "${OS}" == "Raspbian GNU/Linux" ]]; then
+        shutdown -r now
+    fi
 }
 
 newVenv() {
