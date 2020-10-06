@@ -74,6 +74,7 @@ opencvPrerequisites() {
     sudo apt-get install -y libgdk-pixbuf2.0-dev libgtk-3-dev libgtk2.0-dev libhdf5-103 libhdf5-dev libhdf5-serial-dev
     sudo apt-get install -y libjasper-dev libjpeg-dev libpango1.0-dev libpng-dev libqt4-test libqtgui4 libqtwebkit4
     sudo apt-get install -y libswscale-dev libtiff5-dev libv4l-dev libx264-dev libxvidcore-dev
+    sudo apt-get install -y libilmbase-dev libopenexr-dev libgstreamer1.0-dev
 }
 
 raspbianPrerequisites() {
