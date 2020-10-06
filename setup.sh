@@ -196,3 +196,5 @@ case "$1" in
         help
         ;;
 esac
+
+set +ex
