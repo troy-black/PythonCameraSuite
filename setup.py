@@ -1,3 +1,4 @@
+import platform
 import setuptools
 
 
@@ -7,11 +8,15 @@ with open('README.md', 'r') as file:
 with open('install_requires.txt', 'r') as file:
     install_requires = file.read().splitlines()
 
+if platform.machine() == "armv7l" and platform.system() == "Linux":
+    install_requires.append('picamera @ git+https://github.com/troy-black/picamera.git')
+    install_requires.append('numpy')
+
 extras_require = {
-    'picamera': ['picamera;platform_machine=="armv7l" and platform_system=="Linux"'],
-    'opencv': ['opencv-python-headless'],
+    'picamera': ['picamera @ git+https://github.com/troy-black/picamera.git', 'numpy'],
     'test': ['coverage']
 }
+
 extras_require['all'] = [
     pip
     for pips in extras_require.values()

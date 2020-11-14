@@ -2,6 +2,7 @@ aiofiles
 aiohttp
 fastapi
 Jinja2
+opencv-python-headless
 Pillow
 requests
 ujson

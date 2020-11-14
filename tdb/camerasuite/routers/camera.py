@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 from starlette.responses import StreamingResponse, Response, RedirectResponse
 
 from tdb.camerasuite.config import config
@@ -21,3 +21,20 @@ async def get_stream_video():
     else:
         return StreamingResponse(config.camera_driver.stream_image(),
                                  media_type='multipart/x-mixed-replace; boundary=frame')
+
+
+@router.get('/stream/start')
+async def get_stream_start(background_tasks: BackgroundTasks):
+    config.camera_driver.background_task = True
+    background_tasks.add_task(config.camera_driver.generate_image)
+    return {
+        'result': 'start'
+    }
+
+
+@router.get('/stream/stop')
+async def get_stream_stop():
+    config.camera_driver.background_task = False
+    return {
+        'result': 'stop'
+    }

@@ -102,11 +102,11 @@ class ConfigMockDriver(BaseConfig):
 
 class ConfigOpenCvDriver(BaseConfig):
     source: Union[int, str] = 0
-    brightness: float = 50.0
-    contrast: float = 0.0
-    exposure: float = 1000.0
-    width: float = 1280.0
-    height: float = 720.0
+    brightness: float = None  # 50.0
+    contrast: float = None  # 0.0
+    exposure: float = None  # 1000.0
+    width: float = None  # 1280.0
+    height: float = None  # 720.0
 
 
 class ConfigPiCameraDriver(BaseConfig):

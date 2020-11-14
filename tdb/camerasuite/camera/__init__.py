@@ -1,9 +1,9 @@
 from pydantic import BaseModel
-
-NOT_IMPLEMENTED = 'Must be implemented by Driver subclass'
+from threading import Event
 
 
 class CameraDriver(object):
+    background_task = False
     last_image_bytes = None
 
     # used to forward to external url instead of generating img in Python
@@ -11,10 +11,14 @@ class CameraDriver(object):
     forwarder_get_jpg: str = None
     forwarder_get_stream_video: str = None
 
-    _settings: BaseModel
+    event: Event
+    # _settings: BaseModel
+
+    def generate_image(self):
+        raise RuntimeError('Must be implemented by Driver subclass')
 
     def stream_image(self):
-        raise RuntimeError(NOT_IMPLEMENTED)
-
-    def _stream_image_formatter(self):
-        yield b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + self.last_image_bytes + b'\r\n'
+        while self.background_task:
+            self.event.wait()
+            print('yield')
+            yield b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + self.last_image_bytes + b'\r\n'
