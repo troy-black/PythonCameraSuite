@@ -68,7 +68,7 @@ class PiCameraDriver(CameraDriver):
                     if not self.background_task:
                         break
                     self.event.set()
-                    time.sleep(0)
+                    # time.sleep(0)
                     self.event.clear()
 
             self.lock.release()

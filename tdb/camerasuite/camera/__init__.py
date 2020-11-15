@@ -19,6 +19,7 @@ class CameraDriver(object):
 
     def stream_image(self):
         while self.background_task:
+            if self.last_image_bytes:
+                yield b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + self.last_image_bytes + b'\r\n'
             self.event.wait()
             print('yield')
-            yield b'--frame\r\nContent-Type:image/jpeg\r\n\r\n' + self.last_image_bytes + b'\r\n'
