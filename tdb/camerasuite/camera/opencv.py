@@ -1,3 +1,5 @@
+import logging
+import time
 from enum import Enum
 
 import cv2 as cv
@@ -31,24 +33,36 @@ class OpenCvDriver(CameraDriver):
     def __init__(self, settings: ConfigOpenCvDriver):
         super().__init__()
         self._settings: ConfigOpenCvDriver = settings
-        self.driver = cv.VideoCapture(settings.source)
-        if not self.driver.isOpened():
-            raise RuntimeError(f'Could not start camera from source: {settings.source}')
-        self.default_settings: ConfigOpenCvDriver = ConfigOpenCvDriver(**self.get_camera_settings())
-
-        for prop, val in self._settings.dict().items():
-            if hasattr(self, prop):
-                self.__setattr__(prop, val)
+        self.camera: cv.VideoCapture = None  # = cv.VideoCapture(settings.source)
+        self.default_settings: ConfigOpenCvDriver = None  # = ConfigOpenCvDriver(**self.get_camera_settings())
 
     def __getattr__(self, item):
         if item in OpenCvProperties.__members__:
-            return self.driver.get(OpenCvProperties[item])
+            return self.camera.get(OpenCvProperties[item])
         return super().__getattr__(item)
 
     def __setattr__(self, key, value):
         if key in OpenCvProperties.__members__:
-            return self.driver.set(OpenCvProperties[key], value)
+            return self.camera.set(OpenCvProperties[key], value)
         return super().__setattr__(key, value)
+
+    def activate_camera(self):
+        self.camera = cv.VideoCapture(self._settings.source)
+        if not self.camera.isOpened():
+            raise RuntimeError(f'Could not start camera from source: {self._settings.source}')
+        self.default_settings: ConfigOpenCvDriver = ConfigOpenCvDriver(**self.get_camera_settings())
+
+        for prop, val in self._settings.dict().items():
+            if val and hasattr(self, prop):
+                self.__setattr__(prop, val)
+
+        self._settings.merge(ConfigOpenCvDriver(**self.get_camera_settings()))
+        logging.debug(f'Initializing OpenCv: wait 1')
+        time.sleep(1)
+
+    def deactivate_camera(self):
+        if self.camera and self.camera.isOpened():
+            self.camera.release()
 
     def get_camera_settings(self) -> dict:
         return {
@@ -66,7 +80,7 @@ class OpenCvDriver(CameraDriver):
 
     def _generate_image(self, *args):
         try:
-            response, frame = self.driver.read()
+            response, frame = self.camera.read()
             if not response:
                 raise RuntimeError('Could not read frame')
 

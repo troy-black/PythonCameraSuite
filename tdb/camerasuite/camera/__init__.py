@@ -18,20 +18,29 @@ class CameraDriver(object):
         self.event.clear()
         self.fps = 0.0
 
+    def activate_camera(self):
+        pass
+
+    def deactivate_camera(self):
+        pass
+
     def generate_images(self):
         lock = self.lock.acquire(False)
 
         if lock:
-            response = True
-            while response and self.background_task:
+            self.activate_camera()
+            while self.background_task:
                 self.generate_image(False)
 
+            self.deactivate_camera()
             self.lock.release()
 
     def generate_image(self, set_lock=True):
         lock = self.lock.acquire(False) if set_lock else True
 
         if lock:
+            if set_lock:
+                self.activate_camera()
             self._generate_image(set_lock)
 
             self.fps = ((1.0 / (time() - self.timestamp)) + self.fps) / 2
@@ -41,6 +50,7 @@ class CameraDriver(object):
             self.event.clear()
 
             if set_lock:
+                self.deactivate_camera()
                 self.lock.release()
 
     def _generate_image(self, set_lock: bool):
