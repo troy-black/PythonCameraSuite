@@ -1,21 +1,6 @@
 {% extends 'settings_base.html' %}
-{% from "macros/form_builder.html" import range_bulder with context %}
+{% from "macros/setting_forms.html" import settings_form_picamera with context %}
 {% block title %}PiCamera{% endblock %}
 {% block form %}
-    <form id="settings_picamera">
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                {{ range_bulder('width', 'width', details['width'], 640, 4480, 640) }}
-            </div>
-            <div class="form-group col-md-4">
-                {{ range_bulder('height', 'height', details['height'], 360, 2520, 360) }}
-            </div>
-        </div>
-    </form>
-    <button type="button" onclick="request('PUT', '{{ url_for('put_settings_picamera') }}', '{{ 'settings_picamera' }}')"
-            class="btn btn-primary">Update
-    </button>
-{% endblock %}
-{% block js %}
-    <script src="../static/js/badge.js"></script>
+    {{ settings_form_picamera(details) }}
 {% endblock %}

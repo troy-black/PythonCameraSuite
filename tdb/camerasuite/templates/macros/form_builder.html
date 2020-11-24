@@ -62,11 +62,20 @@
     </div>
 {% endmacro %}
 
-{% macro select_bulder(id, label, value, options) %}
+{% macro form_select_builder(id, label, value, options) %}
     <label for="{{ id }}">{{ label }}</label>
     <select class="form-control form-data" id="{{ id }}">
         {% for option in options %}
             <option value="{{ option['index'] }}"{{ ' selected' if value == option['index'] else '' }}>{{ option['name'] }}</option>
+        {% endfor %}
+    </select>
+{% endmacro %}
+
+{% macro select_builder(id, label, value, option_array) %}
+    <label for="{{ id }}">{{ label }}</label>
+    <select class="form-control form-data" id="{{ id }}">
+        {% for option in option_array %}
+            <option value="{{ option }}"{{ ' selected' if value == option else '' }}>{{ option }}</option>
         {% endfor %}
     </select>
 {% endmacro %}
@@ -98,7 +107,7 @@
                     {% elif control['type'] == 'boolean' %}
                         {{ switch_bulder(control['api'] or control['name'], control['name'], control['current_value']) }}
                     {% elif control['type'] == 'menu' %}
-                        {{ select_bulder(control['api'] or control['name'], control['name'], control['current_value'], control['options']) }}
+                        {{ form_select_builder(control['api'] or control['name'], control['name'], control['current_value'], control['options']) }}
                     {% elif control['type'] == 'text' %}
                         {{ text_bulder(control['api'] or control['name'], control['name'], control['current_value']) }}
                     {% endif %}

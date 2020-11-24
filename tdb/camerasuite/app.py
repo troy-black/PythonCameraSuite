@@ -8,7 +8,7 @@ from starlette.templating import Jinja2Templates
 from tdb.camerasuite.config import config, EnumPackages
 from tdb.camerasuite.utilities import import_submodules
 
-logging.basicConfig(level=getattr(logging, config.app.logging))
+# logging.basicConfig(level=getattr(logging, config.app.logging))
 
 logging.debug('Starting Application')
 

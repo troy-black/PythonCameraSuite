@@ -3,6 +3,7 @@ import importlib
 import json
 import os
 import sys
+import time
 from enum import Enum
 from typing import Union, List
 
@@ -110,8 +111,13 @@ class ConfigOpenCvDriver(BaseConfig):
 
 
 class ConfigPiCameraDriver(BaseConfig):
-    width: int = 1280
-    height: int = 720
+    width: int = 1920
+    height: int = 1080
+    shutter_speed: int = 0
+    exposure_mode: str = 'auto'
+    iso: int = 100
+    sensor_mode: int = 1
+    brightness: int = 50
 
 
 class ConfigUv4lDriver(BaseConfig):
@@ -231,7 +237,9 @@ class ConfigBase:
 
     def load_camera_driver(self):
         if hasattr(self, '_camera_driver') and self._camera_driver is not None:
+            self.camera_driver.background_task = False
             del self._camera_driver
+            time.sleep(2)
         camera_module = importlib.import_module(f'{EnumPackages.CAMERA}.{self.web.active_driver.name.lower()}')
         self._camera_driver = getattr(camera_module, f'{self.web.active_driver.value}Driver')(
             getattr(self, self.web.active_driver.name.lower()))

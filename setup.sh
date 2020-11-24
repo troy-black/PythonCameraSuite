@@ -137,7 +137,7 @@ help() {
 
 all() {
     # enable verbose and exit on error
-    set -ex
+    set -x
 
     getOs
     if [[ "${OS}" == "Raspbian GNU/Linux" ]]; then
@@ -160,7 +160,7 @@ all() {
 
 newVenv() {
     # enable verbose and exit on error
-    set -ex
+    set -x
 
     getOs
     if [[ "${OS}" == "Raspbian GNU/Linux" ]]; then
@@ -171,7 +171,7 @@ newVenv() {
 
 updateAll() {
     # enable verbose and exit on error
-    set -ex
+    set -x
 
     getOs
     if [[ "${OS}" == "Raspbian GNU/Linux" ]]; then
@@ -190,7 +190,7 @@ case "$1" in
         updateAll
         ;;
     v | venv)
-        createVenv
+        newVenv
         ;;
     h | help | *)
         help

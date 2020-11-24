@@ -1,3 +1,5 @@
+import logging
+
 from tdb.camerasuite.camera import CameraDriver
 from tdb.camerasuite.config import ConfigUv4lDriver
 
@@ -18,12 +20,12 @@ class Uv4lDriver(CameraDriver):
 
         # force service restart
         if service_uv4l_raspicam('status') != 3:  # stopped state exit code
-            print(service_uv4l_raspicam('stop'))
-        print(service_uv4l_raspicam('start'))
+            logging.debug(service_uv4l_raspicam('stop'))
+        logging.debug(service_uv4l_raspicam('start'))
 
     def __del__(self):
         # force service stop
-        print(service_uv4l_raspicam('stop'))
+        logging.debug(service_uv4l_raspicam('stop'))
 
 
 if service_uv4l_raspicam('status') == 1:

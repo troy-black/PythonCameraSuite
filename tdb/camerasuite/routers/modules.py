@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from starlette.requests import Request
 
 from tdb.camerasuite.app import templates
+from tdb.camerasuite.config import config
 
 router = APIRouter()
 
@@ -21,3 +22,10 @@ async def get_celestial_tracker(request: Request):
 @router.get('/security')
 async def get_security(request: Request):
     return await template(request, 'security.html', {})
+
+
+@router.get('/astronomy')
+async def get_astronomy(request: Request):
+    details: dict = getattr(config, config.web.active_driver.lower()).dict()
+    details['active_driver'] = config.web.active_driver.lower()
+    return await template(request, 'astronomy.html', details)

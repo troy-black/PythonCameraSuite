@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+{% from "macros/form_builder.html" import range_bulder, select_builder with context %}
+{% from "macros/whitespace.html" import span with context %}
+{% import "macros/setting_forms.html" as setting_forms with context %}
+{% block title %}Astronomy{% endblock %}
+{% block page %}
+    {{ super() }}
+    <h1 class="mt-5">Astronomy</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <img src="../camera/stream/video" alt="Camera Stream" class="img-fluid" id="camera_stream">
+        </div>
+    </div>
+
+    {{ span(1) }}
+
+    <div class="row">
+        <div class="col-md-1">
+            <button type="button" onclick="request('PUT', '{{ url_for('put_settings_picamera') }}', '{{ 'settings_picamera' }}')"
+                    class="btn btn-primary">Capture
+            </button>
+        </div>
+    </div>
+
+    {{ span(1) }}
+
+    {#    TODO - Add Image Counter Slider#}
+    {#    TODO - Add Large Countound Timer#}
+    {#    TODO - Add Last Image Viewer (LightBox)#}
+
+{% endblock %}
+{% block footer %}
+    <button data-toggle="collapse" data-target="#settings_form">Camera Driver Settings</button>
+    <div id="settings_form" class="collapse">
+        {{ setting_forms['settings_form_' + details['active_driver'] ](details) }}
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="../static/js/badge.js"></script>
+{% endblock %}

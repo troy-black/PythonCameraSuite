@@ -1,0 +1,96 @@
+{% from "macros/form_builder.html" import range_bulder, select_builder with context %}
+{% from "macros/whitespace.html" import span with context %}
+
+{% macro settings_form_mock(details) %}
+    <form id="settings_mock">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                {{ range_bulder('width', 'width', details['width'], 640, 4480, 640) }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ range_bulder('height', 'height', details['height'], 360, 2520, 360) }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ range_bulder('fps', 'fps', details['fps'], 1, 60, 1) }}
+            </div>
+        </div>
+    </form>
+    <button type="button" onclick="request('PUT', '{{ url_for('put_settings_mock') }}', '{{ 'settings_mock' }}')"
+            class="btn btn-primary">Update
+    </button>
+
+    <script TYPE="text/javascript">
+        function updateBadge(element) {
+            document.getElementById(element.id + '_badge').textContent = element.value;
+            let x_y = ['width', 'height'];
+            if (x_y.includes(element.id)) {
+                x_y.splice(x_y.indexOf(element.id), 1);
+                let other = document.getElementById(x_y[0])
+                other.value = (element.value / element.step) * other.step;
+                document.getElementById(other.id + '_badge').textContent = other.value;
+            }
+        }
+    </script>
+{% endmacro %}
+
+{% macro settings_form_opencv(details) %}
+    <form id="settings_opencv">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ range_bulder('width', 'width', details['width'], 640, 4480, 640) }}
+            </div>
+            <div class="form-group col-md-6">
+                {{ range_bulder('height', 'height', details['height'], 360, 2520, 360) }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                {{ range_bulder('brightness', 'brightness', details['brightness'], 0, 100, 1) }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ range_bulder('contrast', 'contrast', details['contrast'], 0, 100, 1) }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ range_bulder('exposure', 'exposure', details['exposure'], 0, 195000000, 1) }}
+            </div>
+        </div>
+    </form>
+    <button type="button" onclick="request('PUT', '{{ url_for('put_settings_opencv') }}', '{{ 'settings_opencv' }}')"
+            class="btn btn-primary">Update
+    </button>
+{% endmacro %}
+
+{% macro settings_form_picamera(details) %}
+    <form id="settings_picamera">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                {{ range_bulder('width', 'width', details['width'], 640, 4056, 1) }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ range_bulder('height', 'height', details['height'], 480, 3040, 1) }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ range_bulder('sensor_mode', 'sensor_mode', details['sensor_mode'], 1, 7, 1) }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                {{ range_bulder('iso', 'iso', details['iso'], 100, 1600, 100) }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ range_bulder('brightness', 'brightness', details['brightness'], 0, 100, 1) }}
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                {{ range_bulder('shutter_speed', 'shutter_speed', details['shutter_speed'], 0, 195, 1) }}
+            </div>
+            <div class="form-group col-md-4">
+                {{ select_builder('exposure_mode', 'exposure_mode', details['exposure_mode'], ['off', 'auto', 'night', 'nightpreview', 'backlight', 'spotlight', 'sports', 'snow', 'beach', 'verylong', 'fixedfps', 'antishake', 'fireworks']) }}
+            </div>
+        </div>
+    </form>
+    <button type="button" onclick="request('PUT', '{{ url_for('put_settings_picamera') }}', '{{ 'settings_picamera' }}')"
+            class="btn btn-primary">Update
+    </button>
+{% endmacro %}

@@ -1,36 +1,6 @@
 {% extends 'settings_base.html' %}
-{% from "macros/form_builder.html" import range_bulder with context %}
-{% from "macros/whitespace.html" import span with context %}
+{% from "macros/setting_forms.html" import settings_form_mock with context %}
 {% block title %}Mock{% endblock %}
 {% block form %}
-    <form id="settings_mock">
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                {{ range_bulder('width', 'width', details['width'], 640, 4480, 640) }}
-            </div>
-            <div class="form-group col-md-4">
-                {{ range_bulder('height', 'height', details['height'], 360, 2520, 360) }}
-            </div>
-            <div class="form-group col-md-4">
-                {{ range_bulder('fps', 'fps', details['fps'], 1, 60, 1) }}
-            </div>
-        </div>
-    </form>
-    <button type="button" onclick="request('PUT', '{{ url_for('put_settings_mock') }}', '{{ 'settings_mock' }}')"
-            class="btn btn-primary">Update
-    </button>
-{% endblock %}
-{% block js %}
-    <script TYPE="text/javascript">
-        function updateBadge(element) {
-            document.getElementById(element.id + '_badge').textContent = element.value;
-            let x_y = ['width', 'height'];
-            if (x_y.includes(element.id)) {
-                x_y.splice(x_y.indexOf(element.id), 1);
-                let other = document.getElementById(x_y[0])
-                other.value = (element.value / element.step) * other.step;
-                document.getElementById(other.id + '_badge').textContent = other.value;
-            }
-        }
-    </script>
+    {{ settings_form_mock(details) }}
 {% endblock %}

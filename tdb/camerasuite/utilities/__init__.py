@@ -16,5 +16,5 @@ def import_submodules(package: str, recursive=True) -> dict:
 def import_module(fullname: str):
     try:
         return importlib.import_module(fullname)
-    except ImportError:
+    except (ImportError, OSError):
         return None

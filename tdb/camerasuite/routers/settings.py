@@ -1,7 +1,7 @@
 import json
 from typing import Dict
 
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 from starlette.requests import Request
 
 from tdb.camerasuite.app import templates
@@ -71,14 +71,32 @@ async def put_settings_opencv(settings: ConfigOpenCvDriver):
 
 @router.get('/picamera')
 async def get_settings_picamera(request: Request):
-    return await template(request, 'settings_picamera.html', config.picamera.dict())
+    details: dict = config.picamera.dict()
+    # details['exposure_modes'] = [
+    #     'off',
+    #     'auto',
+    #     'night',
+    #     'nightpreview',
+    #     'backlight',
+    #     'spotlight',
+    #     'sports',
+    #     'snow',
+    #     'beach',
+    #     'verylong',
+    #     'fixedfps',
+    #     'antishake',
+    #     'fireworks',
+    # ]
+    return await template(request, 'settings_picamera.html', details)
 
 
 @router.put('/picamera', response_model=ConfigPiCameraDriver)
-async def put_settings_picamera(settings: ConfigPiCameraDriver):
+async def put_settings_picamera(settings: ConfigPiCameraDriver, background_tasks: BackgroundTasks):
     config.picamera.merge(settings)
     if config.web.active_driver == EnumDriver.PICAMERA:
         config.load_camera_driver()
+    # config.camera_driver.background_task = True
+    # background_tasks.add_task(config.camera_driver.generate_image)
     return config.picamera
 
 
