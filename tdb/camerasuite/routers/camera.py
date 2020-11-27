@@ -1,5 +1,5 @@
 from fastapi import APIRouter, BackgroundTasks
-from starlette.responses import StreamingResponse, Response, RedirectResponse
+from starlette.responses import StreamingResponse, Response
 
 from tdb.camerasuite.config import config
 
@@ -10,19 +10,13 @@ router = APIRouter()
 async def get_jpg():
     if not config.camera_driver.background_task:
         config.camera_driver.generate_image()
-    if config.camera_driver.forwarder:
-        return RedirectResponse(url=config.camera_driver.forwarder_get_jpg)
-    else:
-        return Response(config.camera_driver.last_image_bytes, media_type='image/jpeg')
+    return Response(config.camera_driver.last_image_bytes, media_type='image/jpeg')
 
 
 @router.get('/stream/video')
 async def get_stream_video():
-    if config.camera_driver.forwarder:
-        return RedirectResponse(url=config.camera_driver.forwarder_get_stream_video)
-    else:
-        return StreamingResponse(config.camera_driver.stream_images(),
-                                 media_type='multipart/x-mixed-replace; boundary=frame')
+    return StreamingResponse(config.camera_driver.stream_images(),
+                             media_type='multipart/x-mixed-replace; boundary=frame')
 
 
 @router.get('/stream/start')

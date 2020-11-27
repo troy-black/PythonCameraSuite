@@ -2,39 +2,271 @@
 {% from "macros/form_builder.html" import range_bulder, select_builder with context %}
 {% from "macros/whitespace.html" import span with context %}
 {% import "macros/setting_forms.html" as setting_forms with context %}
+
 {% block title %}Astronomy{% endblock %}
+
+{% block css %}
+    <style>
+        #image_carousel .list-inline {
+            white-space: nowrap;
+            overflow-x: auto;
+        }
+
+        #image_carousel .carousel-indicators {
+            position: static;
+            left: initial;
+            width: initial;
+            margin-left: initial;
+        }
+
+        #image_carousel .carousel-indicators > li {
+            width: initial;
+            height: initial;
+            text-indent: initial;
+        }
+
+        #image_carousel .carousel-indicators > li.active img {
+            opacity: 0.7;
+        }
+    </style>
+{% endblock %}
+
 {% block page %}
     {{ super() }}
     <h1 class="mt-5">Astronomy</h1>
+{#    <div class="custom-control custom-switch">#}
+{#        <input type="checkbox" class="custom-control-input" id="stream_switch">#}
+{#        <label class="custom-control-label" for="stream_switch">Steam Video</label>#}
+{#    </div>#}
+{#    <div class="row">#}
+{#        <div class="col-md-12">#}
+{#            <img src="../camera/jpg" alt="Camera Stream" class="img-fluid" id="camera_stream">#}
+{#        </div>#}
+{#    </div>#}
+{##}
+{#    {{ span(1) }}#}
+{##}
     <div class="row">
-        <div class="col-md-12">
-            <img src="../camera/stream/video" alt="Camera Stream" class="img-fluid" id="camera_stream">
-        </div>
-    </div>
-
-    {{ span(1) }}
-
-    <div class="row">
-        <div class="col-md-1">
-            <button type="button" onclick="request('PUT', '{{ url_for('put_settings_picamera') }}', '{{ 'settings_picamera' }}')"
-                    class="btn btn-primary">Capture
+        <div class="col-md-3">
+            <button onclick="capture()" id="capture_button"
+                    type="button" class="btn btn-primary">Capture
             </button>
         </div>
+        <div class="col-md-3">
+            {{ range_bulder('image_count', 'Capture Images', 1, 1, 30, 1) }}
+        </div>
     </div>
 
     {{ span(1) }}
 
-    {#    TODO - Add Image Counter Slider#}
-    {#    TODO - Add Large Countound Timer#}
-    {#    TODO - Add Last Image Viewer (LightBox)#}
+    <div class="row">
+        <div class="col-md-3">
+            <div class="progress">
+                <div id="image_progress" class="progress-bar progress-bar-striped"
+                     style="width: 0%">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="progress">
+                <div id="total_progress" class="progress-bar progress-bar-striped"
+                     style="width: 0%">
+                </div>
+            </div>
+        </div>
+    </div>
 
+    {{ span(1) }}
+
+    <div class="row">
+        <div class="col-md-3">
+            <button data-toggle="collapse" data-target="#saved_images">Saved Images</button>
+        </div>
+    </div>
+
+    <div id="saved_images" class="collapse">
+        {{ span(1) }}
+        <div class="col-lg-12" id="slider">
+            <div id="image_carousel" class="carousel slide">
+                <div class="carousel-inner" id="carousel_items">
+                    <a class="carousel-control left pt-3" href="#image_carousel" data-slide="prev"><i class="fa fa-chevron-left"></i></a>
+                    <a class="carousel-control right pt-3" href="#image_carousel" data-slide="next"><i class="fa fa-chevron-right"></i></a>
+
+                    <div id="carousel-selector-item-0" class="active item carousel-item" data-slide-number="0">
+                        <img src="../camera/jpg" class="img-fluid" alt="0">
+                    </div>
+                </div>
+
+                <ul class="carousel-indicators list-inline" id="carousel_line_items">
+                    <li class="list-inline-item active">
+                        <a id="carousel-selector-0" class="selected" data-slide-to="0" data-target="#image_carousel">
+                            <img src="../camera/jpg" class="img-fluid" alt="0">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
 {% block footer %}
-    <button data-toggle="collapse" data-target="#settings_form">Camera Driver Settings</button>
+    {{ span(1) }}
+    <div class="row">
+        <div class="col-md-3">
+            <button data-toggle="collapse" data-target="#settings_form">Camera Driver Settings</button>
+        </div>
+    </div>
     <div id="settings_form" class="collapse">
         {{ setting_forms['settings_form_' + details['active_driver'] ](details) }}
     </div>
 {% endblock %}
+
 {% block js %}
     <script src="../static/js/badge.js"></script>
+    <script TYPE="text/javascript">
+        const image_count = document.getElementById('image_count');
+        const carousel_items = document.getElementById('carousel_items');
+        const carousel_line_items = document.getElementById('carousel_line_items');
+        const total_progress = document.getElementById('total_progress');
+        const image_progress = document.getElementById('image_progress');
+
+        let next_item_number = 1;
+
+        let loop_item = 0;
+        let capturing = false;
+
+        let last_ts = null;
+
+        let next_ts = 0;
+
+        let start_ts = 0;
+
+        let countdown_timer = null;
+
+        function get_ts() {
+            return (new Date()).getTime();
+        }
+
+        function calculate_delay() {
+            let delay = (document.getElementById('fps') || document.getElementById('exposure')).value * 1000;
+            delay += 2000;
+            if (next_ts === 0) {
+                next_ts = get_ts() + delay;
+            } else {
+                let divide = 1;
+                if (delay > 2000) {
+                    divide = 2;
+                }
+                // next_ts = get_ts() + ((delay + (get_ts() - last_ts)) / divide);
+                next_ts = get_ts() + (get_ts() - last_ts);
+            }
+            last_ts = get_ts();
+        }
+
+        function capture() {
+            if (capturing === true) {
+                debugger;
+                return;
+            }
+            capturing = true;
+            loop_item = 0;
+
+            total_progress.classList.add('progress-bar-animated');
+            total_progress.setAttribute('style', 'width: 0%');
+
+            image_progress.classList.add('progress-bar-animated');
+            image_progress.setAttribute('style', 'width: 0%');
+
+            countdown_timer = setInterval(countdown_timer_function, 75);
+            get_jpg();
+        }
+
+        function get_jpg() {
+            calculate_delay();
+
+            const xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.onload = function() {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    let image_data = reader.result;
+                    build_carousel_items(image_data);
+                    build_carousel_line_items(image_data, 'image_carousel');
+                    next_item_number++;
+                    loop_item++;
+                    let val = ((loop_item / image_count.value) * 100).toFixed(2);
+                    total_progress.setAttribute('style', 'width: ' + val + '%');
+                    total_progress.innerText = loop_item;
+                    if (loop_item < image_count.value) {
+                        get_jpg();
+                    } else {
+                        // debugger;
+                        clearInterval(countdown_timer);
+
+                        total_progress.classList.remove('progress-bar-animated');
+                        total_progress.setAttribute('style', 'width: 100%');
+
+                        image_progress.classList.remove('progress-bar-animated');
+                        image_progress.setAttribute('style', 'width: 100%');
+                        image_progress.innerText = '';
+
+                        next_ts = 0;
+                        capturing = false;
+                    }
+                }
+                reader.readAsDataURL(xmlHttpRequest.response);
+            };
+
+            xmlHttpRequest.open('GET', '{{ url_for('get_jpg') }}');
+            xmlHttpRequest.responseType = 'blob';
+            xmlHttpRequest.send();
+        }
+
+        function countdown_timer_function() {
+            let val = 100 - (((next_ts - get_ts()) / (next_ts - last_ts)) * 100);
+            image_progress.setAttribute('style', 'width: ' + val + '%');
+            image_progress.innerText = ((next_ts - get_ts()) / 1000).toFixed(2);
+        }
+
+        function build_carousel_items(image_data) {
+            // <div class="item carousel-item" data-slide-number="1">
+            //     <img src="../camera/jpg" class="img-fluid" alt="1">
+            // </div>
+            let div = document.createElement('div');
+            div.setAttribute('class', 'item carousel-item');
+            div.setAttribute('data-slide-number', next_item_number.toString());
+            div.setAttribute('id', 'carousel-selector-item-' + next_item_number.toString());
+            let img = document.createElement('img');
+            img.setAttribute('class', 'img-fluid');
+            // img.setAttribute('src', '../camera/jpg?ts=' + ts);
+            img.setAttribute('src', image_data);
+            img.setAttribute('alt', next_item_number.toString());
+            div.appendChild(img);
+            carousel_items.appendChild(div);
+        }
+
+        function build_carousel_line_items(image_data, data_target) {
+            // <li class="list-inline-item active">
+            //     <a id="carousel-selector-0" class="selected" data-slide-to="1" data-target="#image_carousel">
+            //         <img src="../camera/jpg" class="img-fluid" alt="1">
+            //     </a>
+            // </li>
+            let li = document.createElement('li');
+            li.setAttribute('class', 'list-inline-item active');
+            li.setAttribute('id', 'carousel-selector-line-item-' + next_item_number.toString());
+            let a = document.createElement('a');
+            a.setAttribute('class', 'selected');
+            a.setAttribute('id', 'carousel-selector-' + next_item_number.toString());
+            a.setAttribute('data-slide-to', next_item_number.toString());
+            a.setAttribute('data-target', '#' + data_target);
+            li.appendChild(a);
+            let img = document.createElement('img');
+            img.setAttribute('class', 'img-fluid');
+            // img.setAttribute('src', '../camera/jpg?ts=' + ts);
+            img.setAttribute('src', image_data);
+            img.setAttribute('alt', next_item_number.toString());
+            a.appendChild(img);
+            carousel_line_items.appendChild(li);
+        }
+
+    </script>
 {% endblock %}

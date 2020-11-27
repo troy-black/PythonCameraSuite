@@ -27,7 +27,6 @@ class EnumDriver(str, Enum):
     MOCK = 'Mock'
     OPENCV = 'OpenCv'
     PICAMERA = 'PiCamera'
-    UV4L = 'Uv4l'
 
 
 # TODO - Don't recreate the wheel
@@ -92,7 +91,6 @@ class ConfigWeb(BaseConfig):
     display_mock: bool = True
     display_opencv: bool = False
     display_picamera: bool = False
-    display_uv4l: bool = False
 
 
 class ConfigMockDriver(BaseConfig):
@@ -120,95 +118,6 @@ class ConfigPiCameraDriver(BaseConfig):
     brightness: int = 50
 
 
-class ConfigUv4lDriver(BaseConfig):
-    host: str = networking.get_hostname()
-    port: int = 8080
-    v4l2_fourcc: int = 1196444237
-    width: int = 1920
-    height: int = 1080
-    brightness: int = 50
-    contrast: int = 0
-    saturation: int = 0
-    red_balance: int = 100
-    blue_balance: int = 100
-    sharpness: int = 0
-    rotate: int = 0
-    shutter_speed: int = 0
-    zoom_factor: int = 1
-    iso_sensitivity: int = 0
-    jpeg_quality: int = 85
-    frame_rate: int = 30
-    horizontal_mirror: int = 0
-    vertical_mirror: int = 0
-    text_overlay: int = 0
-    object_face_detection: int = 0
-    stills_denoise: int = 0
-    video_denoise: int = 0
-    image_stabilization: int = 0
-    flicker_avoidance: int = 3
-    awb_mode: int = 0
-    exposure_mode: int = 1
-    exposure_metering: int = 0
-    drc_strength: int = 3
-
-    def get_url(self):
-        return f'http://{self.host}:{self.port}/api/videodev/settings'
-
-    async def get_api_videodev_settings(self) -> dict:
-        return await get_json(self.get_url())
-
-    async def put_api_videodev_settings(self) -> dict:
-        return await put_json(self.get_url(),
-                              json={
-                                  'apply_settings_only_if_changed': True,
-                                  'controls': [
-                                      {
-                                          'current_value': val,
-                                          'id': Uv4lRestApiId[key].value
-                                      }
-                                      for key, val in self.dict().items()
-                                      if key in Uv4lRestApiId.__members__
-                                  ],
-                                  'current_format': {
-                                      'height': self.height,
-                                      'v4l2_fourcc': self.v4l2_fourcc,
-                                      'width': self.width
-                                  }
-                              })
-
-
-class Uv4lRestApiId(int, Enum):
-    brightness = 9963776
-    contrast = 9963777
-    saturation = 9963778
-    red_balance = 9963790
-    blue_balance = 9963791
-    sharpness = 9963803
-    rotate = 9963810
-    shutter_speed = 134217728
-    zoom_factor = 134217729
-    iso_sensitivity = 134217730
-    jpeg_quality = 134217739
-    frame_rate = 134217741
-    horizontal_mirror = 9963796
-    vertical_mirror = 9963797
-    text_overlay = 134217734
-    object_face_detection = 134217736
-    stills_denoise = 134217737
-    video_denoise = 134217738
-    image_stabilization = 134217740
-    flicker_avoidance = 9963800
-    awb_mode = 134217731
-    exposure_mode = 134217732
-    exposure_metering = 134217733
-    drc_strength = 134217735
-
-
-# class Uv4lFourCC(int, Enum):
-#     MJPEG_Video = 1196444237
-#     JPEG_Still = 1195724874
-#
-#
 class ConfigBase:
     def __init__(self, *, profile: str = None):
         profile = profile  # or args.profile
@@ -223,8 +132,6 @@ class ConfigBase:
             if 'opencv' in self.camera_drivers else None
         self.picamera: ConfigPiCameraDriver = ConfigPiCameraDriver.build(profile=profile) \
             if 'picamera' in self.camera_drivers else None
-        self.uv4l: ConfigUv4lDriver = ConfigUv4lDriver.build(profile=profile) \
-            if 'uv4l' in self.camera_drivers else None
 
         self.last_driver = None
         self._camera_driver: CameraDriver = self.camera_driver

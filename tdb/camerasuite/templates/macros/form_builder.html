@@ -1,30 +1,30 @@
-{% macro basic_form_bulder(formId, details, column_count) %}
-    {% set keys = details.keys()|list %}
-    <form id="{{ formId }}">
-        {% for row in range((details|length / column_count)|int) %}
-            <div class="form-row">
-                {% for col in range(row * column_count, row * column_count + column_count) %}
-                    <div class="form-group col-md-{{ (12 / column_count)|int }}">
-                        <label for="{{ keys[col] }}">{{ keys[col] }}</label>
-                        <input type="text" class="form-control form-data" id="{{ keys[col] }}"
-                               value="{{ details[keys[col]] }}">
-                    </div>
-                {% endfor %}
-                {% set r = ((details|length / column_count)|int * column_count)|int %}
-                {% for col in range(r, r + (details|length % column_count)) %}
-                    <div class="form-group col-md-{{ (12 / column_count)|int }}">
-                        <label for="{{ keys[col] }}">{{ keys[col] }}</label>
-                        <input type="text" class="form-control form-data" id="{{ keys[col] }}"
-                               value="{{ details[keys[col]] }}">
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
-    </form>
-    <button type="button" onclick="request('PUT', '{{ url_for('put_{}'.format(formId)) }}', '{{ formId }}')"
-            class="btn btn-primary">Update
-    </button>
-{% endmacro %}
+{#{% macro basic_form_bulder(formId, details, column_count) %}#}
+{#    {% set keys = details.keys()|list %}#}
+{#    <form id="{{ formId }}">#}
+{#        {% for row in range((details|length / column_count)|int) %}#}
+{#            <div class="form-row">#}
+{#                {% for col in range(row * column_count, row * column_count + column_count) %}#}
+{#                    <div class="form-group col-md-{{ (12 / column_count)|int }}">#}
+{#                        <label for="{{ keys[col] }}">{{ keys[col] }}</label>#}
+{#                        <input type="text" class="form-control form-data" id="{{ keys[col] }}"#}
+{#                               value="{{ details[keys[col]] }}">#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#                {% set r = ((details|length / column_count)|int * column_count)|int %}#}
+{#                {% for col in range(r, r + (details|length % column_count)) %}#}
+{#                    <div class="form-group col-md-{{ (12 / column_count)|int }}">#}
+{#                        <label for="{{ keys[col] }}">{{ keys[col] }}</label>#}
+{#                        <input type="text" class="form-control form-data" id="{{ keys[col] }}"#}
+{#                               value="{{ details[keys[col]] }}">#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        {% endfor %}#}
+{#    </form>#}
+{#    <button type="button" onclick="request('PUT', '{{ url_for('put_{}'.format(formId)) }}', '{{ formId }}')"#}
+{#            class="btn btn-primary">Update#}
+{#    </button>#}
+{#{% endmacro %}#}
 
 {% macro inline_input_builder(id, label, type, value) %}
     <div class="form-group form-inline">
@@ -40,7 +40,10 @@
         {% set r = r + 1 %}
         <div class="form-check-inline">
             <label class="form-check-label" for="{{ name }}{{ r }}">{{ k }}{{ span(1) }}</label>
-            <input class="form-check-input" type="radio" name="{{ name }}" id="{{ name }}{{ r }}" value="{{ v }}">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
+            </div> <input class="form-check-input" type="radio" name="{{ name }}" id="{{ name }}{{ r }}" value="{{ v }}">
         </div>
     {% endfor %}
     {{ span(1) }}
@@ -54,22 +57,22 @@
            step="{{ step }}" value="{{ value }}" oninput="updateBadge(this)">
 {% endmacro %}
 
-{% macro switch_bulder(id, label, value) %}
-    <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input form-data"
-               id="{{ id }}" {{ 'checked' if value == 1 else '' }}>
-        <label class="custom-control-label" for="{{ id }}">{{ label }}</label>
-    </div>
-{% endmacro %}
+{#{% macro switch_bulder(id, label, value) %}#}
+{#    <div class="custom-control custom-switch">#}
+{#        <input type="checkbox" class="custom-control-input form-data"#}
+{#               id="{{ id }}" {{ 'checked' if value == 1 else '' }}>#}
+{#        <label class="custom-control-label" for="{{ id }}">{{ label }}</label>#}
+{#    </div>#}
+{#{% endmacro %}#}
 
-{% macro form_select_builder(id, label, value, options) %}
-    <label for="{{ id }}">{{ label }}</label>
-    <select class="form-control form-data" id="{{ id }}">
-        {% for option in options %}
-            <option value="{{ option['index'] }}"{{ ' selected' if value == option['index'] else '' }}>{{ option['name'] }}</option>
-        {% endfor %}
-    </select>
-{% endmacro %}
+{#{% macro form_select_builder(id, label, value, options) %}#}
+{#    <label for="{{ id }}">{{ label }}</label>#}
+{#    <select class="form-control form-data" id="{{ id }}">#}
+{#        {% for option in options %}#}
+{#            <option value="{{ option['index'] }}"{{ ' selected' if value == option['index'] else '' }}>{{ option['name'] }}</option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#{% endmacro %}#}
 
 {% macro select_builder(id, label, value, option_array) %}
     <label for="{{ id }}">{{ label }}</label>
@@ -80,45 +83,45 @@
     </select>
 {% endmacro %}
 
-{% macro text_bulder(id, label, value) %}
-    <label for="{{ id }}">{{ label }}</label>
-    <input type="text" class="form-control form-data" id="{{ id }}" value="{{ value }}">
-{% endmacro %}
+{#{% macro text_bulder(id, label, value) %}#}
+{#    <label for="{{ id }}">{{ label }}</label>#}
+{#    <input type="text" class="form-control form-data" id="{{ id }}" value="{{ value }}">#}
+{#{% endmacro %}#}
 
-{% macro controls_form_bulder(formId, controls_array, column_count) %}
-    {% from "macros/whitespace.html" import span with context %}
-    <form id="{{ formId }}">
-
+{#{% macro controls_form_bulder(formId, controls_array, column_count) %}#}
+{#    {% from "macros/whitespace.html" import span with context %}#}
+{#    <form id="{{ formId }}">#}
+{##}
         {# set namespace variables for use outside of loop/scope #}
-        {% set ns = namespace(col=0, last_control=None) %}
-
-        <div class="form-row">
-            {% for control in controls_array %}
+{#        {% set ns = namespace(col=0, last_control=None) %}#}
+{##}
+{#        <div class="form-row">#}
+{#            {% for control in controls_array %}#}
                 {# force new row when type is changed #}
-                {% if ns.col == 0 or (ns.last_control != None and ns.col > 0 and ns.last_control['type'] != control['type']) %}
-                    </div>
-                    <div class="form-row">
-                    {% set ns.col = 0 %}
-                {% endif %}
-
-                <div class="form-group col-md-{{ (12 / column_count)|int }}">
-                    {% if control['type'] == 'integer' %}
-                        {{ range_bulder(control['api'] or control['name'], control['name'], control['current_value'], control['min'], control['max'], control['step']) }}
-                    {% elif control['type'] == 'boolean' %}
-                        {{ switch_bulder(control['api'] or control['name'], control['name'], control['current_value']) }}
-                    {% elif control['type'] == 'menu' %}
-                        {{ form_select_builder(control['api'] or control['name'], control['name'], control['current_value'], control['options']) }}
-                    {% elif control['type'] == 'text' %}
-                        {{ text_bulder(control['api'] or control['name'], control['name'], control['current_value']) }}
-                    {% endif %}
-                </div>
-
-                {% set ns.col = (ns.col + 1) if (ns.col + 1) < column_count else 0 %}
-                {% set ns.last_control = control.copy() %}
-            {% endfor %}
-        </div>
-    </form>
-    <button type="button" onclick="request('PUT', '{{ url_for('put_{}'.format(formId)) }}', '{{ formId }}')"
-            class="btn btn-primary">Update
-    </button>
-{% endmacro %}
+{#                {% if ns.col == 0 or (ns.last_control != None and ns.col > 0 and ns.last_control['type'] != control['type']) %}#}
+{#                    </div>#}
+{#                    <div class="form-row">#}
+{#                    {% set ns.col = 0 %}#}
+{#                {% endif %}#}
+{##}
+{#                <div class="form-group col-md-{{ (12 / column_count)|int }}">#}
+{#                    {% if control['type'] == 'integer' %}#}
+{#                        {{ range_bulder(control['api'] or control['name'], control['name'], control['current_value'], control['min'], control['max'], control['step']) }}#}
+{#                    {% elif control['type'] == 'boolean' %}#}
+{#                        {{ switch_bulder(control['api'] or control['name'], control['name'], control['current_value']) }}#}
+{#                    {% elif control['type'] == 'menu' %}#}
+{#                        {{ form_select_builder(control['api'] or control['name'], control['name'], control['current_value'], control['options']) }}#}
+{#                    {% elif control['type'] == 'text' %}#}
+{#                        {{ text_bulder(control['api'] or control['name'], control['name'], control['current_value']) }}#}
+{#                    {% endif %}#}
+{#                </div>#}
+{##}
+{#                {% set ns.col = (ns.col + 1) if (ns.col + 1) < column_count else 0 %}#}
+{#                {% set ns.last_control = control.copy() %}#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#    </form>#}
+{#    <button type="button" onclick="request('PUT', '{{ url_for('put_{}'.format(formId)) }}', '{{ formId }}')"#}
+{#            class="btn btn-primary">Update#}
+{#    </button>#}
+{#{% endmacro %}#}

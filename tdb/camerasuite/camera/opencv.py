@@ -58,7 +58,7 @@ class OpenCvDriver(CameraDriver):
 
         self._settings.merge(ConfigOpenCvDriver(**self.get_camera_settings()))
         logging.debug(f'Initializing OpenCv: wait 1')
-        time.sleep(1)
+        time.sleep(2)
 
     def deactivate_camera(self):
         if self.camera and self.camera.isOpened():

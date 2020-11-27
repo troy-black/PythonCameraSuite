@@ -58,16 +58,6 @@ getOs() {
     fi
 }
 
-installUv4l() {
-    url="http://www.linux-projects.org/listing/uv4l_repo"
-    if ! grep -q "${url}" /etc/apt/sources.list; then
-        curl ${url}/lpkey.asc | sudo apt-key add -
-        echo "deb ${url}/raspbian/stretch stretch main" | sudo tee -a /etc/apt/sources.list
-        sudo apt-get update -y
-    fi
-    sudo apt-get install -y uv4l uv4l-raspicam uv4l-raspicam-extras uv4l-webrtc uv4l-raspidisp uv4l-raspidisp-extras
-}
-
 opencvPrerequisites() {
     sudo apt-get install -y build-essential cmake pkg-config gfortran python3-pyqt5
     sudo apt-get install -y libatlas-base-dev libavcodec-dev libavformat-dev libcairo2-dev libfontconfig1-dev
@@ -147,7 +137,6 @@ all() {
         setLocal
         setHostname
         enableRaspberryPiCamera
-        installUv4l
         opencvPrerequisites
         venvPrerequisites
     fi
