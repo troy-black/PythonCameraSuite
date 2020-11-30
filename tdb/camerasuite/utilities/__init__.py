@@ -1,5 +1,6 @@
 import importlib
 import pkgutil
+from pathlib import Path
 
 
 def import_submodules(package: str, recursive=True) -> dict:
@@ -18,3 +19,18 @@ def import_module(fullname: str):
         return importlib.import_module(fullname)
     except (ImportError, OSError):
         return None
+
+
+def verify_folder(path: str):
+    try:
+        Path(path).mkdir(parents=True, exist_ok=True)
+        return True
+    except Exception:
+        return False
+
+
+def verify_file_exists(path: str, filename: str):
+    try:
+        return Path(f'{path}/{filename}').exists()
+    except Exception:
+        return False

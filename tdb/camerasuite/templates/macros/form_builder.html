@@ -49,6 +49,11 @@
     {{ span(1) }}
 {% endmacro %}
 
+{% macro input_builder(id, label, type, value) %}
+    <label for="{{ id }}">{{ label }}: </label>
+    <input type="{{ type }}" class="form-control" id="{{ id }}" value="{{ value }}">
+{% endmacro %}
+
 {% macro range_bulder(id, label, value, min, max, step) %}
     {% from "macros/whitespace.html" import span with context %}
     <label for="{{ id }}">{{ label }}{{ span(1) }}<span id="{{ id }}_badge"

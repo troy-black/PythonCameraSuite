@@ -19,6 +19,7 @@ app = FastAPI()
 
 templates = Jinja2Templates(directory='tdb/camerasuite/templates')
 app.mount('/static', StaticFiles(directory='tdb/camerasuite/static'), name='static')
+app.mount('/storage', StaticFiles(directory='tdb/camerasuite/storage'), name='storage')
 
 routes = import_submodules(EnumPackages.ROUTERS)
 for module_name, module in routes.items():

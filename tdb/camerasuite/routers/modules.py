@@ -28,4 +28,5 @@ async def get_security(request: Request):
 async def get_astronomy(request: Request):
     details: dict = getattr(config, config.web.active_driver.lower()).dict()
     details['active_driver'] = config.web.active_driver.lower()
+    details['stream_switch'] = config.camera_driver.background_task
     return await template(request, 'astronomy.html', details)
