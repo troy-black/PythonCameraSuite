@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <img src="../camera/stream/video" alt="Camera Stream" class="img-fluid" id="camera_stream">
+            <img src="{{ url_for('get_stream_video') }}" alt="Camera Stream" class="img-fluid" id="camera_stream">
         </div>
     </div>
 
@@ -49,14 +49,14 @@
         <div class="col-md-3">
             <div class="progress">
                 <div id="image_progress" class="progress-bar progress-bar-striped"
-                     style="width: 0%">
+                     style="width: 0">
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="progress">
                 <div id="total_progress" class="progress-bar progress-bar-striped"
-                     style="width: 0%">
+                     style="width: 0">
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@
         <div class="col-md-12" id="saved_images">
             <label class="checkbox-inline">
                 <input type="checkbox" disabled>
-                <img src="../camera/stream/video" onclick="image_click(this)" id="thumbnail_stream" alt="Camera Stream Thumbnail" class="img-fluid" width="250" style="height:auto">
+                <img src="{{ url_for('get_stream_video') }}" onclick="image_click(this)" id="thumbnail_stream" alt="Camera Stream Thumbnail" class="img-fluid" width="250" style="height:auto">
             </label>
         </div>
         <div class="col-md-12">
@@ -120,7 +120,7 @@
         }
 
         function calculate_delay() {
-            let delay = (document.getElementById('fps') || document.getElementById('exposure')).value * 1000;
+            let delay = (document.getElementById('fps') || document.getElementById('exposure') || document.getElementById('shutter_speed')).value * 1000;
             delay += 2000;
             if (next_ts === 0) {
                 next_ts = get_ts() + delay;
@@ -185,6 +185,7 @@
         }
 
         function jpg_loaded() {
+            calculate_delay()
             next_item_number++;
             loop_item++;
             total_progress.setAttribute('style', 'width: ' + ((loop_item / image_count.value) * 100).toFixed(2) + '%');

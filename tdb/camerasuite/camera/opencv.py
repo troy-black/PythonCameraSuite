@@ -1,6 +1,7 @@
 import logging
 import time
 from enum import Enum
+from typing import Optional
 
 import cv2 as cv
 
@@ -33,8 +34,8 @@ class OpenCvDriver(CameraDriver):
     def __init__(self, settings: ConfigOpenCvDriver):
         super().__init__()
         self._settings: ConfigOpenCvDriver = settings
-        self.camera: cv.VideoCapture = None  # = cv.VideoCapture(settings.source)
-        self.default_settings: ConfigOpenCvDriver = None  # = ConfigOpenCvDriver(**self.get_camera_settings())
+        self.camera: cv.VideoCapture = Optional[None]  # = cv.VideoCapture(settings.source)
+        self.default_settings: ConfigOpenCvDriver = Optional[None]  # = ConfigOpenCvDriver(**self.get_camera_settings())
 
     def __getattr__(self, item):
         if item in OpenCvProperties.__members__:

@@ -1,4 +1,3 @@
-# import argparse
 import importlib
 import json
 import os
@@ -9,10 +8,8 @@ from typing import Union, List
 
 from pydantic import BaseModel
 
-from tdb.camerasuite.utilities import networking
 from tdb.camerasuite.camera import CameraDriver
 from tdb.camerasuite.utilities import import_submodules
-from tdb.camerasuite.utilities.requests import get_json, put_json
 
 # parser = argparse.ArgumentParser()
 # parser.add_argument("-p", "--profile", help="load specified settings profiles")

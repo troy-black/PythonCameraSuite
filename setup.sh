@@ -17,7 +17,7 @@ cloneGitRepo() {
         git pull
     else
         git clone "${APP_REPOSITORY}"
-        cd "${APP}"/
+        cd "${APP}"/ || return
     fi
 }
 
@@ -44,10 +44,10 @@ getOs() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         OS=$NAME
-        VERSION=$VERSION_ID
+        # VERSION=$VERSION_ID
     else
         OS=$(uname -s)
-        VERSION=$(uname -r)
+        # VERSION=$(uname -r)
         case "${OS}" in
             CYGWIN* | MINGW*)
                 OS="Windows"
@@ -98,7 +98,7 @@ updateVenv() {
         pip install --upgrade --no-cache-dir wheel
 
         # install/update project in dev mode
-        pip install --upgrade --no-cache-dir -v -e .[all]
+        pip install --upgrade --no-cache-dir -v -e .["all"]
     fi
 }
 

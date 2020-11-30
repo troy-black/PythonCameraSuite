@@ -1,6 +1,7 @@
 import io
 import logging
 import time
+from typing import Optional
 
 import picamera
 
@@ -14,7 +15,7 @@ class PiCameraDriver(CameraDriver):
         self.settings: ConfigPiCameraDriver = settings
 
         self.stream = io.BytesIO()
-        self.camera: picamera.PiCamera = None
+        self.camera: picamera.PiCamera = Optional[None]
 
     def __del__(self):
         self.deactivate_camera()
