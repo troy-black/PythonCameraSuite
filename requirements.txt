@@ -24,6 +24,6 @@ starlette==0.13.6
 -e git+https://github.com/troy-black/PythonCameraSuite.git@d22bc8e881e6ba3fbf322d9eea966b763ed6f1ea#egg=troydblack_PythonCameraSuite
 typing-extensions==3.7.4.3
 ujson==4.0.1
-urllib3==1.26.2
+urllib3==1.26.5
 uvicorn==0.12.3
 yarl==1.6.3
