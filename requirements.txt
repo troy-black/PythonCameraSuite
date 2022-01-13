@@ -17,7 +17,7 @@ multidict==5.0.2
 numpy==1.19.4
 opencv-python-headless==4.4.0.46
 picamera @ git+https://github.com/troy-black/picamera.git@4d30c1e83d3233f9a4544aa2eff549ce395bf97d
-Pillow==8.0.1
+Pillow==9.0.0
 pydantic==1.7.2
 requests==2.25.0
 starlette==0.13.6
