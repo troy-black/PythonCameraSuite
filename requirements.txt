@@ -14,7 +14,7 @@ Jinja2==2.11.2
 loguru==0.5.3
 MarkupSafe==1.1.1
 multidict==5.0.2
-numpy==1.19.4
+numpy==1.22.0
 opencv-python-headless==4.4.0.46
 picamera @ git+https://github.com/troy-black/picamera.git@4d30c1e83d3233f9a4544aa2eff549ce395bf97d
 Pillow==8.0.1
